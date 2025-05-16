@@ -21,4 +21,4 @@ public class ChunkCoordinate {
 	public void setChunkY(int chunkY) {
 		this.chunkY = chunkY;
 	}	
-}
+} 
