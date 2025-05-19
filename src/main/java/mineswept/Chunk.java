@@ -24,8 +24,7 @@ public class Chunk {
 	public Chunk(int width, int height, int numOfMines, BigInteger seed) {
 		
 		this(width, height, numOfMines);
-		
-		
+    
 	}
 	
 	// TODO Implement constructor
@@ -62,10 +61,22 @@ public class Chunk {
 	
 	public BigInteger getSeed() {
 		return seed;
-	}
+	} 
 
-	public void addAdjacentChunk(Chunk chunk, CardinalDirection direction) {
-
-		
+	public void setAdjacentChunk(Chunk adjacentChunk, CardinalDirection direction) {
+		switch(direction) {
+			case NORTH:
+				north = adjacentChunk;
+				break;
+			case SOUTH:
+				south = adjacentChunk;
+				break;	
+			case WEST:
+				west = adjacentChunk;
+				break;
+			case EAST:
+				east = adjacentChunk;
+				break;		
+		}		
 	}
 }
