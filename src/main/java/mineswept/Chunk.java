@@ -24,7 +24,7 @@ public class Chunk {
 	public Chunk(int width, int height, int numOfMines, BigInteger seed) {
 		
 		this(width, height, numOfMines);
-		
+    
 	}
 	
 	// TODO Implement constructor
