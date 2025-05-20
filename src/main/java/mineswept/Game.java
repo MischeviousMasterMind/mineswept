@@ -4,6 +4,7 @@ import java.time.Duration;
 
 public class Game {
 	
+	private Map map; 
 	private double xScreenCoordinate; 
 	private double yScreenCoordinate; 
 	private Duration timeElapsed;
