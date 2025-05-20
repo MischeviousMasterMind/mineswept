@@ -16,6 +16,7 @@ import static org.lwjgl.system.MemoryUtil.*;
 
 public class Game {
 	
+	private Map map; 
 	private double xScreenCoordinate; 
 	private double yScreenCoordinate; 
 	private Duration timeElapsed;
@@ -23,10 +24,8 @@ public class Game {
 	private int numOfRevealedTiles;
 	private int numOfRevealedChunks;
 	private boolean isGameOver;
-	
 	// The window handle
 	private static long window;
-	
 	
 	public Game() {
 		
@@ -64,5 +63,4 @@ public class Game {
 			throw new RuntimeException("Failed to create the GLFW window");
 		}
 	}
-
 }
