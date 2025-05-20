@@ -1,5 +1,6 @@
 package mineswept;
 
+import java.util.Collection;
 import java.util.HashMap;
 
 public class Map {
@@ -40,7 +41,7 @@ public class Map {
 			chunks.put(generated[0], new Chunk(width, length, numMines));
 			
 			//set the adjacent chunk 
-			chunks.get(coord).addAdjacentChunk(n, CardinalDirection.NORTH); 
+			chunks.get(coord).setAdjacentChunk(n, CardinalDirection.NORTH); 
 			n.setAdjacentChunk(chunks.get(coord), CardinalDirection.SOUTH);
 			
 		}
@@ -58,7 +59,7 @@ public class Map {
 			chunks.put(generated[1], new Chunk(width, length, numMines));
 					
 			//set the adjacent chunk 
-			chunks.get(coord).addAdjacentChunk(n, CardinalDirection.SOUTH); 
+			chunks.get(coord).setAdjacentChunk(n, CardinalDirection.SOUTH); 
 			n.setAdjacentChunk(chunks.get(coord), CardinalDirection.NORTH);
 					
 		}
@@ -76,7 +77,7 @@ public class Map {
 			chunks.put(generated[2], new Chunk(width, length, numMines));
 					
 			//set the adjacent chunk 
-			chunks.get(coord).addAdjacentChunk(n, CardinalDirection.EAST); 
+			chunks.get(coord).setAdjacentChunk(n, CardinalDirection.EAST); 
 			n.setAdjacentChunk(chunks.get(coord), CardinalDirection.WEST);
 					
 		}
@@ -94,13 +95,26 @@ public class Map {
 			chunks.put(generated[3], new Chunk(width, length, numMines));
 					
 			//set the adjacent chunk 
-			chunks.get(coord).addAdjacentChunk(n, CardinalDirection.WEST); 
+			chunks.get(coord).setAdjacentChunk(n, CardinalDirection.WEST); 
 			n.setAdjacentChunk(chunks.get(coord), CardinalDirection.EAST);
 					
-		}
+		} 
 		
 		return generated; 
 		
 	}
+	
+	public Chunk getChunk(ChunkCoordinate coord) {
+		
+		return chunks.get(coord);
+		
+	}
+	
+	public Collection<Chunk> getAllChunks() {
+		
+		return chunks.values();
+		
+	}
+	
 
 }
