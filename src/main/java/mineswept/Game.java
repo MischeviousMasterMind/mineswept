@@ -13,6 +13,7 @@ public class Game {
 	private int numOfRevealedChunks;
 	private boolean isGameOver;
 	
+
 	
 	public Game() {
 		
@@ -38,5 +39,4 @@ public class Game {
 		// TODO Auto-generated method stub
 
 	}
-
 }
