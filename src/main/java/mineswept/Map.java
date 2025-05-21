@@ -19,7 +19,10 @@ public class Map {
 		this.length = length;
  		
 		//put a new chunk into the hashmap, and set the coords to (0,0)
-		this.chunks.put(new ChunkCoordinate(0, 0), new Chunk(width, length, numMines, new ChunkCoordinate(0, 0)));
+		ChunkCoordinate newChunkCoord = new ChunkCoordinate(0, 0);
+		Chunk newChunk = new Chunk(width, length, numMines, newChunkCoord);
+		
+		chunks.put(newChunkCoord, newChunk);
 		
 		
 	}
