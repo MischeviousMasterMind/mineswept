@@ -75,8 +75,8 @@ public class Chunk {
 	// TODO Implement constructor
 	public Chunk(Tile[][] tiles) {
 		
-		this.width = 0;
-		this.height = 0;
+		this.width = tiles[0].length;
+		this.height = tiles.length;
 		this.tiles = tiles;
 		
 	}
