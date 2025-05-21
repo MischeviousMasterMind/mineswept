@@ -1,6 +1,9 @@
 package mineswept;
 
+import java.io.File;
+import java.time.Duration;
 
+import java.io.FileNotFoundException;
 import java.io.PrintStream;
 
 import org.lwjgl.*;
@@ -24,6 +27,7 @@ import java.util.HashMap; // import the HashMap class
 
 public class Game {
 	
+	private Map map; 
 	private double xScreenCoordinate; 
 	private double yScreenCoordinate; 
 	private int timeElapsed;
@@ -93,8 +97,8 @@ public class Game {
 		 numOfFlags = s.nextInt();
 		 numOfRevealedTiles = s.nextInt();
 		 numOfRevealedChunks = s.nextInt();
-		 isGameOver = s.nextBoolean();
-		 
+
+		 s.nextLine();
 		 // read all of the chunks
 		 ChunkCoordinate coordinate = new ChunkCoordinate(s.nextInt(), s.nextInt());
 		 
@@ -106,6 +110,8 @@ public class Game {
 		 
 		 while (s.hasNextLine()) {		  			 
 			 Tile[][] tileArr = new Tile[height][width];
+			 int colIndex = 0;
+			 int rowIndex = 0;
 			 
 			 String tileData = s.nextLine();
 			 for (int i=0; i< tileData.length()-3; i+=3) {
@@ -113,7 +119,7 @@ public class Game {
 				int flagged = Integer.parseInt(tileData.substring(i+1,i+2));
 				int state = Integer.parseInt(tileData.substring(i+2, i+3));
 				
-				boolean isRevealed = false, isFlagged = false;					
+				boolean isRevealed, isFlagged;					
 				if (revealed==1) {
 					isRevealed = true;
 				}
@@ -121,10 +127,14 @@ public class Game {
 					isFlagged = true;
 				}
 				
-				Tile t = new Tile (isRevealed, isFlagged, state);
+				if (colIndex >= width) {
+					colIndex = 0;
+					rowIndex++;
+				}
+				tileArr[rowIndex][colIndex] = new Tile (isRevealed, isFlagged, state);			
+				colIndex++;
 			 }				 
-		 
-		 
+		 		 
 		 // create chunk based on tileArr
 		 Chunk chunk = new Chunk(tileArr);
 		 chunk.setNumOfTilesSweeped(numOfTilesSweeped);
