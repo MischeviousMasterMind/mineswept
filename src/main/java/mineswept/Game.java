@@ -99,7 +99,7 @@ public class Game {
 			 
 			 while (s.hasNextLine()) {		 
 				 // read all of the chunks
-				 ChunkCoordinate cordinate = new ChunkCoordinate(s.nextInt(), s.nextInt());
+				 ChunkCoordinate coordinate = new ChunkCoordinate(s.nextInt(), s.nextInt());
 				 
 				 int numOfTilesSweeped = s.nextInt();
 				 int numOfEmptyTiles = s.nextInt();
@@ -107,7 +107,7 @@ public class Game {
 				 int width = s.nextInt();
 				 int height = s.nextInt();
 				 
-				 Chunk chunk = new Chunk(width, height, numOfMines);
+				 Chunk chunk = new Chunk(width, height, numOfMines, coordinate);
 				 chunk.setNumOfTilesSweeped(numOfTilesSweeped);
 				 chunk.setNumOfEmptyTiles(numOfEmptyTiles);
 				 
