@@ -18,9 +18,14 @@ public class Map {
 		this.length = length;
  		
 		//put a new chunk into the hashmap, and set the coords to (0,0)
-		this.chunks.put(new ChunkCoordinate(0, 0), new Chunk(width, length, numMines));
-		
-		
+		this.chunks.put(new ChunkCoordinate(0, 0), new Chunk(width, length, numMines));		
+	}
+	
+	public Map(int numMines, int width, int length, HashMap<ChunkCoordinate, Chunk> chunks) {
+		this.chunks = chunks;
+		this.numMines = numMines;
+		this.width = width;
+		this.length = length;
 	}
 	
 	public ChunkCoordinate[] generateChunks(ChunkCoordinate coord) {

@@ -17,6 +17,8 @@ import static org.lwjgl.system.MemoryUtil.*;
 import java.io.File;  // Import the File class
 import java.io.FileNotFoundException;  // Import this class to handle errors
 import java.util.Scanner; // Import the Scanner class to read text files
+import java.util.HashMap; // import the HashMap class
+
 
 public class Game {
 	
@@ -30,6 +32,7 @@ public class Game {
 	private boolean isGameOver;
 	// The window handle
 	private static long window;
+	private Map map;
 	
 	public Game() {
 		
@@ -79,58 +82,70 @@ public class Game {
 		});
 	}
 	
-	public void read(File file) {
-		 try {
-			 Scanner s = new Scanner(file);
+	public void read(File file) throws FileNotFoundException {
+		 Scanner s = new Scanner(file);
+		 
+		// instance variables for Game class at the top of the file
+		 xScreenCoordinate = s.nextDouble();
+		 yScreenCoordinate = s.nextDouble();
+		 timeElapsed = s.nextInt();
+		 numOfFlags = s.nextInt();
+		 numOfRevealedTiles = s.nextInt();
+		 numOfRevealedChunks = s.nextInt();
+		 isGameOver = s.nextBoolean();
+		 
+		 while (s.hasNextLine()) {		 
+			 // read all of the chunks
+			 ChunkCoordinate cordinate = new ChunkCoordinate(s.nextInt(), s.nextInt());
 			 
-			// instance variables for Game class at the top of the file
-			 xScreenCoordinate = s.nextDouble();
-			 yScreenCoordinate = s.nextDouble();
-			 timeElapsed = s.nextInt();
-			 numOfFlags = s.nextInt();
-			 numOfRevealedTiles = s.nextInt();
-			 numOfRevealedChunks = s.nextInt();
-			 isGameOver = s.nextBoolean();
+			 int numOfTilesSweeped = s.nextInt();
+			 int numOfEmptyTiles = s.nextInt();
+			 int numOfMines = s.nextInt();
+			 int width = s.nextInt();
+			 int height = s.nextInt();
 			 
-			 while (s.hasNextLine()) {		 
-				 // read all of the chunks
-				 ChunkCoordinate cordinate = new ChunkCoordinate(s.nextInt(), s.nextInt());
-				 
-				 int numOfTilesSweeped = s.nextInt();
-				 int numOfEmptyTiles = s.nextInt();
-				 int numOfMines = s.nextInt();
-				 int width = s.nextInt();
-				 int height = s.nextInt();
-				 
-				 Chunk chunk = new Chunk(width, height, numOfMines);
-				 chunk.setNumOfTilesSweeped(numOfTilesSweeped);
-				 chunk.setNumOfEmptyTiles(numOfEmptyTiles);
-				 
-				 Tile[][] tileArr = new Tile[height][width];
-				 
-				 String tileData = s.nextLine();
-				 for (int i=0; i< tileData.length()-3; i+=3) {
-					int revealed = Integer.parseInt(tileData.substring(i,i+1)); 
-					int flagged = Integer.parseInt(tileData.substring(i+1,i+2));
-					int state = Integer.parseInt(tileData.substring(i+2, i+3));
-					
-					boolean isRevealed, isFlagged;					
-					if (revealed==1) {
-						isRevealed = true;
-					}
-					if (flagged == 1) {
-						isFlagged = true;
-					}
-					
-					Tile t = new Tile (isRevealed, isFlagged, state);
-				 }
-				 
+			 // initialize tileArr
+			 Tile[][] tileArr = new Tile[height][width];
+			 int rowIndex = 0;
+			 int colIndex = 0;
+			 
+			 // build up tileArr
+			 String tileData = s.nextLine();
+			 for (int i=0; i< tileData.length()-3; i+=3) {
+				int revealed = Integer.parseInt(tileData.substring(i,i+1)); 
+				int flagged = Integer.parseInt(tileData.substring(i+1,i+2));
+				int state = Integer.parseInt(tileData.substring(i+2, i+3));
+				
+				boolean isRevealed, isFlagged;					
+				if (revealed==1) {
+					isRevealed = true;
+				}
+				if (flagged == 1) {
+					isFlagged = true;
+				}
+				
+				Tile t = new Tile(isRevealed, isFlagged, state);
+				
+				if (colIndex >= width) {
+					colIndex = 0;
+					rowIndex++;
+				}
+				tileArr[rowIndex][colIndex] = t;
+				colIndex++;
 			 }
-			 s.close();
-		 } catch(FileNotFoundException e) {
-			 System.out.println("An error occurred.");
-		     e.printStackTrace();
+			 
+			 // create chunk based on tileArr
+			 Chunk chunk = new Chunk(tileArr);
+			 chunk.setNumOfTilesSweeped(numOfTilesSweeped);
+			 chunk.setNumOfEmptyTiles(numOfEmptyTiles);
+			 
+			 HashMap<ChunkCoordinate, Chunk> chunks = new HashMap<ChunkCoordinate, Chunk>();
+			 chunks.put(cordinate, chunk);
+			 
+			 map = new Map(numOfMines, width, height, chunks);
 		 }
+		 s.close();
+		
 	}
 
 }
