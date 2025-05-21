@@ -1,9 +1,6 @@
 package mineswept;
 
-import java.io.File;
-import java.time.Duration;
 
-import java.io.FileNotFoundException;
 import java.io.PrintStream;
 
 import org.lwjgl.*;
@@ -27,7 +24,6 @@ import java.util.HashMap; // import the HashMap class
 
 public class Game {
 	
-	private Map map; 
 	private double xScreenCoordinate; 
 	private double yScreenCoordinate; 
 	private int timeElapsed;
@@ -117,7 +113,7 @@ public class Game {
 				int flagged = Integer.parseInt(tileData.substring(i+1,i+2));
 				int state = Integer.parseInt(tileData.substring(i+2, i+3));
 				
-				boolean isRevealed, isFlagged;					
+				boolean isRevealed = false, isFlagged = false;					
 				if (revealed==1) {
 					isRevealed = true;
 				}
