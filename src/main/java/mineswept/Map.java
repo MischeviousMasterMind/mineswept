@@ -18,6 +18,11 @@ public class Map {
 		this.width = width;
 		this.length = length;
  		
+		//put a new chunk into the hashmap, and set the coords to (0,0)
+		ChunkCoordinate newChunkCoord = new ChunkCoordinate(0, 0);
+		Chunk newChunk = new Chunk(width, length, numMines, newChunkCoord);
+		
+		chunks.put(newChunkCoord, newChunk);
 		
 		
 		//put a new chunk into the hashmap, and set the coords to (0,0)
