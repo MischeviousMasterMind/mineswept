@@ -16,26 +16,62 @@ public class Chunk {
 	
 	private Chunk north, south, east, west;
 	
+	private ChunkCoordinate coordinate;
+	
 	// TODO Implement constructor
-	public Chunk(int width, int height, int numOfMines) {
+	public Chunk(int width, int height, int numOfMines, ChunkCoordinate coordinate) {
 		
-		this.width = 0;
-		this.height = 0;
+		this.width = width;
+		this.height = height;
+		this.coordinate = coordinate;
 		
 		seed = new BigInteger(numOfConfigurations().bitLength(), 0, random).mod(numOfConfigurations());
 
 		generate();
 	}
 	
-	public Chunk(int width, int height, int numOfMines, BigInteger seed) {
+	public Chunk(int width, int height, int numOfMines, ChunkCoordinate coordinate, BigInteger seed) {
 		
-		this.width = 0;
-		this.height = 0;
+		this.width = width;
+		this.height = height;
+		this.coordinate = coordinate;
 		this.seed = seed;
 
 		generate();
 	}
 	
+	public int getNumOfTilesSweeped() {
+		return numOfTilesSweeped;
+	}
+
+	public void setNumOfTilesSweeped(int numOfTilesSweeped) {
+		this.numOfTilesSweeped = numOfTilesSweeped;
+	}
+
+	public int getNumOfEmptyTiles() {
+		return numOfEmptyTiles;
+	}
+
+	public void setNumOfEmptyTiles(int numOfEmptyTiles) {
+		this.numOfEmptyTiles = numOfEmptyTiles;
+	}
+
+	public int getNumOfMines() {
+		return numOfMines;
+	}
+
+	public void setNumOfMines(int numOfMines) {
+		this.numOfMines = numOfMines;
+	}
+
+	public int getWidth() {
+		return width;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+
 	// TODO Implement constructor
 	public Chunk(Tile[][] tiles) {
 		
@@ -116,6 +152,22 @@ public class Chunk {
 		
 	}
 	
+	public Tile[][] getTiles() {
+		return tiles;
+	}
+
+	public void setTiles(Tile[][] tiles) {
+		this.tiles = tiles;
+	}
+
+	public ChunkCoordinate getCoordinate() {
+		return coordinate;
+	}
+
+	public void setCoordinate(ChunkCoordinate coordinate) {
+		this.coordinate = coordinate;
+	}
+
 	public BigInteger getSeed() {
 		return seed;
 	} 

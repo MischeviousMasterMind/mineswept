@@ -1,6 +1,11 @@
 package mineswept;
 
+import java.io.File;
 import java.time.Duration;
+
+import java.io.FileNotFoundException;
+import java.io.PrintStream;
+
 import org.lwjgl.*;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
@@ -94,22 +99,18 @@ public class Game {
 		 numOfRevealedChunks = s.nextInt();
 		 isGameOver = s.nextBoolean();
 		 
-		 while (s.hasNextLine()) {		 
-			 // read all of the chunks
-			 ChunkCoordinate cordinate = new ChunkCoordinate(s.nextInt(), s.nextInt());
-			 
-			 int numOfTilesSweeped = s.nextInt();
-			 int numOfEmptyTiles = s.nextInt();
-			 int numOfMines = s.nextInt();
-			 int width = s.nextInt();
-			 int height = s.nextInt();
-			 
-			 // initialize tileArr
+		 // read all of the chunks
+		 ChunkCoordinate coordinate = new ChunkCoordinate(s.nextInt(), s.nextInt());
+		 
+		 int numOfTilesSweeped = s.nextInt();
+		 int numOfEmptyTiles = s.nextInt();
+		 int numOfMines = s.nextInt();
+		 int width = s.nextInt();
+		 int height = s.nextInt();
+		 
+		 while (s.hasNextLine()) {		  			 
 			 Tile[][] tileArr = new Tile[height][width];
-			 int rowIndex = 0;
-			 int colIndex = 0;
 			 
-			 // build up tileArr
 			 String tileData = s.nextLine();
 			 for (int i=0; i< tileData.length()-3; i+=3) {
 				int revealed = Integer.parseInt(tileData.substring(i,i+1)); 
@@ -124,27 +125,71 @@ public class Game {
 					isFlagged = true;
 				}
 				
-				Tile t = new Tile(isRevealed, isFlagged, state);
-				
-				if (colIndex >= width) {
-					colIndex = 0;
-					rowIndex++;
-				}
-				tileArr[rowIndex][colIndex] = t;
-				colIndex++;
-			 }
-			 
-			 // create chunk based on tileArr
-			 Chunk chunk = new Chunk(tileArr);
-			 chunk.setNumOfTilesSweeped(numOfTilesSweeped);
-			 chunk.setNumOfEmptyTiles(numOfEmptyTiles);
-			 
-			 HashMap<ChunkCoordinate, Chunk> chunks = new HashMap<ChunkCoordinate, Chunk>();
-			 chunks.put(cordinate, chunk);
-			 
-			 map = new Map(numOfMines, width, height, chunks);
+				Tile t = new Tile (isRevealed, isFlagged, state);
+			 }				 
+		 
+		 
+		 // create chunk based on tileArr
+		 Chunk chunk = new Chunk(tileArr);
+		 chunk.setNumOfTilesSweeped(numOfTilesSweeped);
+		 chunk.setNumOfEmptyTiles(numOfEmptyTiles);
+		 
+		 HashMap<ChunkCoordinate, Chunk> chunks = new HashMap<ChunkCoordinate, Chunk>();
+		 chunks.put(coordinate, chunk);
+		 
+		 map = new Map(numOfMines, width, height, chunks);	
 		 }
 		 s.close();
+	}
+
+	public void write(File file) throws FileNotFoundException{
+		
+		PrintStream writer = new PrintStream(file);
+		
+		writer.println(xScreenCoordinate);
+		writer.println(yScreenCoordinate);
+		writer.println(timeElapsed);
+		writer.println(numOfFlags);
+		writer.println(numOfRevealedTiles);
+		writer.println(numOfRevealedChunks);
+		
+		for(Chunk chunk : map.getAllChunks()) {
+			
+			writer.println(chunk.getCoordinate().getChunkX());
+			writer.println(chunk.getCoordinate().getChunkY());
+			writer.println(chunk.getNumOfTilesSweeped());
+			writer.println(chunk.getNumOfEmptyTiles());
+			writer.println(chunk.getNumOfMines());
+			writer.println(chunk.getWidth());
+			writer.println(chunk.getHeight());
+			
+			for(Tile[] tiles : chunk.getTiles()) {
+				for(Tile tile : tiles) {
+					
+					if(tile.isRevealed()) {
+						writer.print("1");
+					} else {
+						writer.print("0");
+					}
+					
+					if(tile.isFlagged()) {
+						writer.print("1");
+					} else {
+						writer.print("0");
+					}
+					
+					writer.print(tile.getState());
+					
+					
+				}
+				
+			}
+			
+			writer.println();
+			
+		}
+		
+		writer.close();
 		
 	}
 
