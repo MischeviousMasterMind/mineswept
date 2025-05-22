@@ -1,0 +1,22 @@
+0.0
+1.0
+2
+3
+4
+5
+
+1 // number of mines in each chunk
+3 // width of each chunk
+3 // height of each chunk
+
+0 // chunk X coordinate
+0 // chunk Y coordinate
+1 // number of tiles sweeped
+2 // number of empty tiles
+001119002001119002001119002
+
+0 // chunk X coordinate
+0 // chunk Y coordinate
+1 // number of tiles sweeped
+2 // number of empty tiles
+001119002001119002001119002
