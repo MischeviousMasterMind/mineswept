@@ -7,31 +7,31 @@ public class Chunk {
 
 	private Tile[][] tiles;
 	private int numOfTilesSweeped, numOfEmptyTiles, numOfMines;
-	
+
 	private static Random random = new Random();
 
 	private final int width, height;
-	
+
 	private BigInteger seed;
-	
+
 	private Chunk north, south, east, west;
-	
+
 	private ChunkCoordinate coordinate;
-	
+
 	// TODO Implement constructor
 	public Chunk(int width, int height, int numOfMines, ChunkCoordinate coordinate) {
-		
+
 		this.width = width;
 		this.height = height;
 		this.coordinate = coordinate;
-		
+
 		seed = new BigInteger(numOfConfigurations().bitLength(), 0, random).mod(numOfConfigurations());
 
 		generate();
 	}
-	
+
 	public Chunk(int width, int height, int numOfMines, ChunkCoordinate coordinate, BigInteger seed) {
-		
+
 		this.width = width;
 		this.height = height;
 		this.coordinate = coordinate;
@@ -39,7 +39,17 @@ public class Chunk {
 
 		generate();
 	}
-	
+
+	// TODO Implement constructor
+	public Chunk(Tile[][] tiles, ChunkCoordinate coordinate) {
+
+		this.width = tiles[0].length;
+		this.height = tiles.length;
+		this.coordinate = coordinate;
+		this.tiles = tiles;
+
+	}
+
 	public int getNumOfTilesSweeped() {
 		return numOfTilesSweeped;
 	}
@@ -72,46 +82,34 @@ public class Chunk {
 		return height;
 	}
 
-	// TODO Implement constructor
-	public Chunk(Tile[][] tiles) {
-		
-		this.width = tiles[0].length;
-		this.height = tiles.length;
-		this.tiles = tiles;
-		
-	}
-	
 	// TODO Implement method
 	private void generate() {
-		
+
 		BigInteger temp = seed;
-		
+
 		int count = 0;
-		
-		for(int i = 0; i < width; i++)
-		{
-			for(int ii = 0; ii < height; ii++)
-			{
-				System.out.print("Comparing " + temp + " to: " + nCr(width * height - i * height - ii - 1, numOfMines - 1 - count));
-				
-				if(temp.compareTo(nCr(width * height - i * height - ii - 1, numOfMines - 1 - count)) >= 0 && !temp.equals(BigInteger.ZERO))
-				{
+
+		for (int i = 0; i < width; i++) {
+			for (int ii = 0; ii < height; ii++) {
+				System.out.print("Comparing " + temp + " to: "
+						+ nCr(width * height - i * height - ii - 1, numOfMines - 1 - count));
+
+				if (temp.compareTo(nCr(width * height - i * height - ii - 1, numOfMines - 1 - count)) >= 0
+						&& !temp.equals(BigInteger.ZERO)) {
 					System.out.println(" SUBTRACTING!");
 					temp = temp.subtract(nCr(width * height - i * height - ii - 1, numOfMines - 1 - count));
-				}
-				else
-				{
+				} else {
 					System.out.println(" adding a mine!");
 					tiles[i][ii] = new Tile(false, false, 9);
 					count++;
-					
-					if(count == numOfMines) {
+
+					if (count == numOfMines) {
 						return;
 					}
-				}	
+				}
 			}
 		}
-		
+
 	}
 
 	public final BigInteger numOfConfigurations() {
@@ -129,11 +127,11 @@ public class Chunk {
 	private BigInteger factorial(int n) {
 
 		BigInteger number = BigInteger.valueOf(n);
-		
-		if(n == 0) return BigInteger.ONE;
-		
-		for (int i = 2; i < n; i++)
-		{
+
+		if (n == 0)
+			return BigInteger.ONE;
+
+		for (int i = 2; i < n; i++) {
 			number = number.multiply(BigInteger.valueOf(i));
 		}
 
@@ -141,17 +139,17 @@ public class Chunk {
 	}
 
 	public Tile getTile(int row, int col) {
-		
+
 		return tiles[row][col];
-		
+
 	}
-	
+
 	public void setTile(int row, int col, Tile newTile) {
-		
+
 		tiles[row][col] = newTile;
-		
+
 	}
-	
+
 	public Tile[][] getTiles() {
 		return tiles;
 	}
@@ -170,22 +168,22 @@ public class Chunk {
 
 	public BigInteger getSeed() {
 		return seed;
-	} 
+	}
 
 	public void setAdjacentChunk(Chunk adjacentChunk, CardinalDirection direction) {
-		switch(direction) {
-			case NORTH:
-				north = adjacentChunk;
-				break;
-			case SOUTH:
-				south = adjacentChunk;
-				break;	
-			case WEST:
-				west = adjacentChunk;
-				break;
-			case EAST:
-				east = adjacentChunk;
-				break;		
-		}		
+		switch (direction) {
+		case NORTH:
+			north = adjacentChunk;
+			break;
+		case SOUTH:
+			south = adjacentChunk;
+			break;
+		case WEST:
+			west = adjacentChunk;
+			break;
+		case EAST:
+			east = adjacentChunk;
+			break;
+		}
 	}
 }
