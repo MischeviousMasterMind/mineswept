@@ -8,7 +8,7 @@ public class Map {
 	private HashMap<ChunkCoordinate, Chunk> chunks;
 	private int numMines;
 	private int width;
-	private int length;
+	private int height;
 	
 	
 	public Map(int numMines, int width, int length) {
@@ -16,7 +16,7 @@ public class Map {
 		this.chunks = new HashMap<ChunkCoordinate, Chunk>();
 		this.numMines = numMines;
 		this.width = width;
-		this.length = length;
+		this.height = length;
  		
 		//put a new chunk into the hashmap, and set the coords to (0,0)
 		ChunkCoordinate newChunkCoord = new ChunkCoordinate(0, 0);
@@ -28,10 +28,11 @@ public class Map {
 	}
 	
 	public Map(int numMines, int width, int length, HashMap<ChunkCoordinate, Chunk> chunks) {
+		
 		this.chunks = chunks;
 		this.numMines = numMines;
 		this.width = width;
-		this.length = length;
+		this.height = length;
 
 	}
 	
@@ -46,10 +47,10 @@ public class Map {
 			generated[0] = new ChunkCoordinate(coord.getChunkX(), coord.getChunkY()-1);
 			
 			//create the new chunk
-			Chunk n = new Chunk(width, length, numMines, generated[0]); 
+			Chunk n = new Chunk(width, height, numMines, generated[0]); 
 			
 			//store the new chunk into the hashmap 
-			chunks.put(generated[0], new Chunk(width, length, numMines, generated[0]));
+			chunks.put(generated[0], new Chunk(width, height, numMines, generated[0]));
 			
 			//set the adjacent chunk 
 			chunks.get(coord).setAdjacentChunk(n, CardinalDirection.NORTH); 
@@ -64,10 +65,10 @@ public class Map {
 			generated[1] = new ChunkCoordinate(coord.getChunkX(), coord.getChunkY()+1);
 					
 			//create the new chunk
-			Chunk n = new Chunk(width, length, numMines, generated[1]); 
+			Chunk n = new Chunk(width, height, numMines, generated[1]); 
 					
 			//store the new chunk into the hashmap 
-			chunks.put(generated[1], new Chunk(width, length, numMines, generated[1]));
+			chunks.put(generated[1], new Chunk(width, height, numMines, generated[1]));
 					
 			//set the adjacent chunk 
 			chunks.get(coord).setAdjacentChunk(n, CardinalDirection.SOUTH); 
@@ -82,10 +83,10 @@ public class Map {
 			generated[2] = new ChunkCoordinate(coord.getChunkX()+1, coord.getChunkY());
 					
 			//create the new chunk
-			Chunk n = new Chunk(width, length, numMines, generated[2]); 
+			Chunk n = new Chunk(width, height, numMines, generated[2]); 
 					
 			//store the new chunk into the hashmap 
-			chunks.put(generated[2], new Chunk(width, length, numMines, generated[2]));
+			chunks.put(generated[2], new Chunk(width, height, numMines, generated[2]));
 					
 			//set the adjacent chunk 
 			chunks.get(coord).setAdjacentChunk(n, CardinalDirection.EAST); 
@@ -100,10 +101,10 @@ public class Map {
 			generated[3] = new ChunkCoordinate(coord.getChunkX()-1, coord.getChunkY());
 					
 			//create the new chunk
-			Chunk n = new Chunk(width, length, numMines, generated[3]); 
+			Chunk n = new Chunk(width, height, numMines, generated[3]); 
 					
 			//store the new chunk into the hashmap 
-			chunks.put(generated[3], new Chunk(width, length, numMines, generated[3]));
+			chunks.put(generated[3], new Chunk(width, height, numMines, generated[3]));
 					
 			//set the adjacent chunk 
 			chunks.get(coord).setAdjacentChunk(n, CardinalDirection.WEST); 
@@ -126,6 +127,17 @@ public class Map {
 		return chunks.values();
 		
 	}
-	
 
+	public int getNumMines() {
+		return numMines;
+	}
+
+	public int getWidth() {
+		return width;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+	
 }
