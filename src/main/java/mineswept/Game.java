@@ -60,6 +60,7 @@ public class Game {
 		Scanner s = new Scanner(file);
 
 		// instance variables for Game class at the top of the file
+
 		xScreenCoordinate = s.nextDouble();
 		s.nextLine();
 		yScreenCoordinate = s.nextDouble();
@@ -114,7 +115,6 @@ public class Game {
 				if (flagged == 1) {
 					isFlagged = true;
 				}
-
 				if (colIndex >= width) {
 					colIndex = 0;
 					rowIndex++;
