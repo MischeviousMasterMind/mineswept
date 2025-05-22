@@ -50,41 +50,10 @@ public class Game {
 	}
 
 	public static void main(String[] args) {
-		// Setup an error callback. The default implementation
-		// will print the error message in System.err.
-//		GLFWErrorCallback.createPrint(System.err).set();
-//		
-//		/* Initialize the library */
-//		if (!glfwInit()) {
-//			throw new IllegalStateException("Unable to initialize GLFW");
-//		}
-//		
-//		// Configure GLFW
-//		glfwDefaultWindowHints(); // optional, the current window hints are already the default
-////		glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE); // the window will stay hidden after creation
-//		glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE); // the window will be resizable
-//		
-//	    /* Create a windowed mode window and its OpenGL context */
-//	    window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
-//		if (window == NULL) {
-//			throw new RuntimeException("Failed to create the GLFW window");
-//		}
-//		
-//		// Setup a key callback. It will be called every time a key is pressed, repeated or released.
-//		glfwSetKeyCallback(window, (window, key, scancode, action, mods) -> {
-//			if ( key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE )
-//				glfwSetWindowShouldClose(window, true); // We will detect this in the rendering loop
-//		});
 
 		Game game = new Game();
 
-		try {
-			game.read(new File("test-input"));
-			game.write(new File("test-output"));
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
 	}
 
 	public void read(File file) throws FileNotFoundException {
@@ -221,6 +190,38 @@ public class Game {
 
 		writer.close();
 
+	}
+
+	public double getxScreenCoordinate() {
+		return xScreenCoordinate;
+	}
+
+	public double getyScreenCoordinate() {
+		return yScreenCoordinate;
+	}
+
+	public int getTimeElapsed() {
+		return timeElapsed;
+	}
+
+	public int getNumOfFlags() {
+		return numOfFlags;
+	}
+
+	public int getNumOfRevealedTiles() {
+		return numOfRevealedTiles;
+	}
+
+	public int getNumOfRevealedChunks() {
+		return numOfRevealedChunks;
+	}
+
+	public boolean isGameOver() {
+		return isGameOver;
+	}
+
+	public Map getMap() {
+		return map;
 	}
 
 }
