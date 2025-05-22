@@ -217,8 +217,6 @@ public class Game {
 
 			}
 
-			writer.println();
-
 		}
 
 		writer.close();
