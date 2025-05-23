@@ -53,7 +53,7 @@ public class Game {
 
 		Game game = new Game();
 
-		
+		Window window = new Window(game);
 	}
 
 	public void read(File file) throws FileNotFoundException {
