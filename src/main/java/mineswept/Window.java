@@ -18,7 +18,7 @@ public class Window extends JPanel {
 	
 	private Game game;
 	
-	private Image hidden, flag, tile0, tile1, tile2, tile3, tile4, tie5, tile6;
+	private Image hidden, tile0, tile1, tile2, tile3, tile4, tile5, tile6, tile7, tile8, mine, flag;
 
 	public Window(Game game) {
 
@@ -82,8 +82,19 @@ public class Window extends JPanel {
 	}
 
 	private void initializeSprites() {
-
 		hidden= Toolkit.getDefaultToolkit().getImage("resources/tileHidden.png");
-
+		tile0= Toolkit.getDefaultToolkit().getImage("resources/tile-0.png");
+		
+		tile1= Toolkit.getDefaultToolkit().getImage("resources/tile-1.png");
+		tile2= Toolkit.getDefaultToolkit().getImage("resources/tile-2.png");
+		tile3= Toolkit.getDefaultToolkit().getImage("resources/tile-3.png");
+		tile4= Toolkit.getDefaultToolkit().getImage("resources/tile-4.png");
+		tile5= Toolkit.getDefaultToolkit().getImage("resources/tile-5.png");
+		tile6= Toolkit.getDefaultToolkit().getImage("resources/tile-6.png");
+		tile7= Toolkit.getDefaultToolkit().getImage("resources/tile-7.png");
+		tile8= Toolkit.getDefaultToolkit().getImage("resources/tile-8.png");
+		
+		mine= Toolkit.getDefaultToolkit().getImage("resources/tileMine.png");
+		flag= Toolkit.getDefaultToolkit().getImage("resources/flag.png");
 	}
 }
