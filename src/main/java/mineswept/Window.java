@@ -6,12 +6,10 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Toolkit;
-import java.awt.event.ActionListener;
 import java.awt.geom.AffineTransform;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.Timer;
 
 public class Window extends JPanel {
 
@@ -32,7 +30,7 @@ public class Window extends JPanel {
 		f.add(this);
 		f.setResizable(false);
 		
-		hidden = Toolkit.getDefaultToolkit().getImage("resources/tileHidden.png");
+		initializeSprites();
 		
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.setVisible(true);
@@ -56,5 +54,11 @@ public class Window extends JPanel {
 		
 		
 		
+	}
+
+	private void initializeSprites() {
+
+		hidden= Toolkit.getDefaultToolkit().getImage("resources/tileHidden.png");
+
 	}
 }
