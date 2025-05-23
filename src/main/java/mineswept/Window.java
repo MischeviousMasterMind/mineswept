@@ -18,7 +18,7 @@ public class Window extends JPanel {
 	
 	private Game game;
 	
-	private Image hidden, tile0, tile1, tile2, tile3, tile4, tie5, tile6;
+	private Image hidden, flag, tile0, tile1, tile2, tile3, tile4, tie5, tile6;
 
 	public Window(Game game) {
 
@@ -47,13 +47,38 @@ public class Window extends JPanel {
 		AffineTransform tx = AffineTransform.getTranslateInstance(0, 0);
 		
 		
-		((Graphics2D) g).drawImage(hidden, tx, null);
+		
 	}
 
-	public void drawTile(Window g, Tile tile, int x, int y) {
+	public void drawTile(Graphics g, Tile tile, int x, int y) {
 		
+		Image sprite = null;
+
+		if (!tile.isRevealed()) {
+
+			((Graphics2D) g).drawImage(hidden, AffineTransform.getTranslateInstance(x, y), null);
+
+			if (tile.isFlagged()) {
+
+				((Graphics2D) g).drawImage(flag, AffineTransform.getTranslateInstance(x, y), null);
+
+			}
+
+			return;
+
+		}
 		
-		
+		switch(tile.getState()) {
+
+			default:
+				((Graphics2D) g).drawImage(tile0, AffineTransform.getTranslateInstance(x, y), null);
+				break;
+
+			case 1:
+
+				break;
+
+		}
 	}
 
 	private void initializeSprites() {
