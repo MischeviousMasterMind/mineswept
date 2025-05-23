@@ -18,7 +18,7 @@ public class Window extends JPanel {
 	
 	private Game game;
 	
-	private Image hidden, tile0, tile1, tile2, tile3, tile4, tie5, tile6;
+	private Image hidden, flag, tile0, tile1, tile2, tile3, tile4, tile5, tile6, tile7, tile8;
 
 	public Window(Game game) {
 
@@ -50,7 +50,63 @@ public class Window extends JPanel {
 		((Graphics2D) g).drawImage(hidden, tx, null);
 	}
 
-	public void drawTile(Window g, Tile tile, int x, int y) {
+	public void drawTile(Graphics g, Tile tile, int x, int y) {
+		
+		Image sprite = null; 
+		
+		if(!tile.isRevealed()) {
+			((Graphics2D) g).drawImage(hidden, AffineTransform.getTranslateInstance(0, 0), null);
+			
+			if(tile.isFlagged()) {
+				((Graphics2D) g).drawImage(flag, AffineTransform.getTranslateInstance(0, 0), null);
+			}
+			
+			return;
+			
+		} 
+		
+		switch(tile.getState()) {
+			
+			default:
+				((Graphics2D) g).drawImage(tile0, AffineTransform.getTranslateInstance(0, 0), null);
+				break;
+				
+			case 1:
+				((Graphics2D) g).drawImage(tile1, AffineTransform.getTranslateInstance(0, 0), null);
+				break;
+				
+			case 2:
+				((Graphics2D) g).drawImage(tile2, AffineTransform.getTranslateInstance(0, 0), null);
+				break;
+			
+			case 3:
+				((Graphics2D) g).drawImage(tile3, AffineTransform.getTranslateInstance(0, 0), null);
+				break;
+				
+			case 4:
+				((Graphics2D) g).drawImage(tile4, AffineTransform.getTranslateInstance(0, 0), null);
+				break;
+				
+			case 5:
+				((Graphics2D) g).drawImage(tile5, AffineTransform.getTranslateInstance(0, 0), null);
+				break;
+			
+			case 6:
+				((Graphics2D) g).drawImage(tile6, AffineTransform.getTranslateInstance(0, 0), null);
+				break;
+				
+			case 7:
+				((Graphics2D) g).drawImage(tile7, AffineTransform.getTranslateInstance(0, 0), null);
+				break;
+				
+			case 8:
+				((Graphics2D) g).drawImage(tile8, AffineTransform.getTranslateInstance(0, 0), null);
+				break;
+			
+		
+		}
+		
+		
 		
 		
 		
