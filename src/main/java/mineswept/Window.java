@@ -52,49 +52,74 @@ public class Window extends JPanel {
 
 	public void drawTile(Graphics g, Tile tile, int x, int y) {
 		
-		Image sprite = null;
-
-		if (!tile.isRevealed()) {
-
-			((Graphics2D) g).drawImage(hidden, AffineTransform.getTranslateInstance(x, y), null);
-
-			if (tile.isFlagged()) {
-
-				((Graphics2D) g).drawImage(flag, AffineTransform.getTranslateInstance(x, y), null);
-
+		Image sprite = null; 
+		
+		if(!tile.isRevealed()) {
+			((Graphics2D) g).drawImage(hidden, AffineTransform.getTranslateInstance(0, 0), null);
+			
+			if(tile.isFlagged()) {
+				((Graphics2D) g).drawImage(flag, AffineTransform.getTranslateInstance(0, 0), null);
 			}
-
+			
 			return;
-
-		}
+			
+		} 
 		
 		switch(tile.getState()) {
-
+			
 			default:
-				((Graphics2D) g).drawImage(tile0, AffineTransform.getTranslateInstance(x, y), null);
+				((Graphics2D) g).drawImage(tile0, AffineTransform.getTranslateInstance(0, 0), null);
 				break;
-
+				
 			case 1:
-
+				((Graphics2D) g).drawImage(tile1, AffineTransform.getTranslateInstance(0, 0), null);
 				break;
-
+				
+			case 2:
+				((Graphics2D) g).drawImage(tile2, AffineTransform.getTranslateInstance(0, 0), null);
+				break;
+			
+			case 3:
+				((Graphics2D) g).drawImage(tile3, AffineTransform.getTranslateInstance(0, 0), null);
+				break;
+				
+			case 4:
+				((Graphics2D) g).drawImage(tile4, AffineTransform.getTranslateInstance(0, 0), null);
+				break;
+				
+			case 5:
+				((Graphics2D) g).drawImage(tile5, AffineTransform.getTranslateInstance(0, 0), null);
+				break;
+			
+			case 6:
+				((Graphics2D) g).drawImage(tile6, AffineTransform.getTranslateInstance(0, 0), null);
+				break;
+				
+			case 7:
+				((Graphics2D) g).drawImage(tile7, AffineTransform.getTranslateInstance(0, 0), null);
+				break;
+				
+			case 8:
+				((Graphics2D) g).drawImage(tile8, AffineTransform.getTranslateInstance(0, 0), null);
+				break;
+			
 		}
 	}
 
 	private void initializeSprites() {
-		hidden= Toolkit.getDefaultToolkit().getImage("resources/tileHidden.png");
-		tile0= Toolkit.getDefaultToolkit().getImage("resources/tile-0.png");
+		hidden  = Toolkit.getDefaultToolkit().getImage("resources/tileHidden.png");
+		tile0   = Toolkit.getDefaultToolkit().getImage("resources/tile-0.png");
 		
-		tile1= Toolkit.getDefaultToolkit().getImage("resources/tile-1.png");
-		tile2= Toolkit.getDefaultToolkit().getImage("resources/tile-2.png");
-		tile3= Toolkit.getDefaultToolkit().getImage("resources/tile-3.png");
-		tile4= Toolkit.getDefaultToolkit().getImage("resources/tile-4.png");
-		tile5= Toolkit.getDefaultToolkit().getImage("resources/tile-5.png");
-		tile6= Toolkit.getDefaultToolkit().getImage("resources/tile-6.png");
-		tile7= Toolkit.getDefaultToolkit().getImage("resources/tile-7.png");
-		tile8= Toolkit.getDefaultToolkit().getImage("resources/tile-8.png");
+		tile1   = Toolkit.getDefaultToolkit().getImage("resources/tile-1.png");
+		tile2   = Toolkit.getDefaultToolkit().getImage("resources/tile-2.png");
+		tile3   = Toolkit.getDefaultToolkit().getImage("resources/tile-3.png");
+		tile4   = Toolkit.getDefaultToolkit().getImage("resources/tile-4.png");
+		tile5   = Toolkit.getDefaultToolkit().getImage("resources/tile-5.png");
+		tile6   = Toolkit.getDefaultToolkit().getImage("resources/tile-6.png");
+		tile7   = Toolkit.getDefaultToolkit().getImage("resources/tile-7.png");
+		tile8   = Toolkit.getDefaultToolkit().getImage("resources/tile-8.png");
 		
-		mine= Toolkit.getDefaultToolkit().getImage("resources/tileMine.png");
-		flag= Toolkit.getDefaultToolkit().getImage("resources/flag.png");
+		mine    = Toolkit.getDefaultToolkit().getImage("resources/tileMine.png");
+		flag    = Toolkit.getDefaultToolkit().getImage("resources/flag.png");
 	}
 }
