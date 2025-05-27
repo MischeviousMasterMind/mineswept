@@ -21,6 +21,24 @@ public class ChunkCoordinate {
 	public void setChunkY(int chunkY) {
 		this.chunkY = chunkY;
 	}	
+
+	@Override
+	public boolean equals(Object coord) {
+
+		if (!coord.getClass().equals(ChunkCoordinate.class)) {
+
+			return false;
+
+		}
+
+		return (this.chunkX == ((ChunkCoordinate)coord).chunkX) && (this.chunkY == ((ChunkCoordinate)coord).chunkY);
+
+	}
+
+	@Override
+	public int hashCode() {
+		return 0;
+	}
 } 
 
   
