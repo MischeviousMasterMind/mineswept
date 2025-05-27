@@ -13,8 +13,6 @@ import javax.swing.JPanel;
 
 public class Window extends JPanel {
 
-	public final static int WIDTH = 800;
-	public final static int HEIGHT = 1000;
 	
 	private Game game;
 	
@@ -25,7 +23,7 @@ public class Window extends JPanel {
 		this.game = game;
 
 		JFrame f = new JFrame("Mineswept");
-		f.setSize(new Dimension(WIDTH, HEIGHT));
+		f.setSize(new Dimension(800, 1000));
 		f.setBackground(Color.white);
 		f.add(this);
 		f.setResizable(false);
@@ -34,6 +32,8 @@ public class Window extends JPanel {
 		
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.setVisible(true);
+		
+		
 	}
 
 	@Override
@@ -45,7 +45,9 @@ public class Window extends JPanel {
 //				(int) (game.getxScreenCoordinate() / game.getMap().getWidth()),
 //				(int) (game.getyScreenCoordinate() / game.getMap().getHeight()));
 		
-		drawChunk(g, game.getMap().getChunk(0, 0), 0, 0);
+		drawChunk(g, game.getMap().getChunk(0, 0), (int) getSize().getWidth()/2, (int) getSize().getHeight()/2);
+		
+	
 		
 	}
 
@@ -62,6 +64,8 @@ public class Window extends JPanel {
 		}
 
 	}
+	
+	
 
 	public void drawTile(Graphics g, Tile tile, int x, int y) {
 		
