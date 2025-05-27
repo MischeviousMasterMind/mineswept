@@ -11,24 +11,30 @@ import java.awt.geom.AffineTransform;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-public class Window extends JPanel {
+import javax.swing.event.MouseInputListener;
+import java.awt.event.MouseEvent;
 
-	public final static int WIDTH = 800;
-	public final static int HEIGHT = 1000;
-	
+public class Window extends JPanel implements MouseInputListener {
+
 	private Game game;
 	
 	private Image hidden, tile0, tile1, tile2, tile3, tile4, tile5, tile6, tile7, tile8, mine, flag;
+
+	private int mouseInitX, mouseInitY;
+	private double initxScreenCoordinate, inityScreenCoordinate;
 
 	public Window(Game game) {
 
 		this.game = game;
 
 		JFrame f = new JFrame("Mineswept");
-		f.setSize(new Dimension(WIDTH, HEIGHT));
+		f.setSize(new Dimension(1000, 800));
 		f.setBackground(Color.white);
 		f.add(this);
-		f.setResizable(false);
+		f.setResizable(true);
+
+		addMouseListener(this);
+		addMouseMotionListener(this);
 		
 		initializeSprites();
 		
@@ -45,8 +51,8 @@ public class Window extends JPanel {
 //				(int) (game.getxScreenCoordinate() / game.getMap().getWidth()),
 //				(int) (game.getyScreenCoordinate() / game.getMap().getHeight()));
 		
-		drawChunk(g, game.getMap().getChunk(0, 0), 0, 0);
-		
+		// drawChunk(g, game.getMap().getChunk(0, 0), 0, 0);
+		g.drawRect((int)game.getxScreenCoordinate(), (int)game.getyScreenCoordinate(), 10, 10);
 	}
 
 	public void drawChunk(Graphics g, Chunk chunk, int x, int y) {
@@ -132,5 +138,44 @@ public class Window extends JPanel {
 		
 		mine    = Toolkit.getDefaultToolkit().getImage("resources/tileMine.png");
 		flag    = Toolkit.getDefaultToolkit().getImage("resources/flag.png");
+	}
+
+	public void mouseClicked(MouseEvent e) {
+
+	}
+
+	public void mousePressed(MouseEvent e) {
+
+		System.out.println("Mouse is pressed");
+
+		mouseInitX = e.getXOnScreen();
+		mouseInitY = e.getYOnScreen();
+
+		initxScreenCoordinate = game.getxScreenCoordinate();
+		inityScreenCoordinate = game.getyScreenCoordinate();
+	}
+
+	public void mouseEntered(MouseEvent e) {
+
+	}
+
+	public void mouseReleased(MouseEvent e) {
+
+	}
+
+	public void mouseDragged(MouseEvent e) {
+
+		game.setScreenCoordinate(initxScreenCoordinate + (mouseInitX - e.getXOnScreen()), inityScreenCoordinate + (mouseInitY - e.getYOnScreen()));
+
+		System.out.printf("Mouse is being dragged: (%f, %f)\n", game.getxScreenCoordinate(), game.getyScreenCoordinate());
+
+	}
+
+	public void mouseMoved(MouseEvent e) {
+
+	}
+
+	public void mouseExited(MouseEvent e) {
+
 	}
 }
