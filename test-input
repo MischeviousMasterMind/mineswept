@@ -13,10 +13,10 @@
 0 // chunk Y coordinate
 1 // number of tiles sweeped
 2 // number of empty tiles
-001119002001119002001119002
+000000000000000000000000000
 
-0 // chunk X coordinate
-0 // chunk Y coordinate
+1 // chunk X coordinate
+1 // chunk Y coordinate
 1 // number of tiles sweeped
 2 // number of empty tiles
 001119002001119002001119002

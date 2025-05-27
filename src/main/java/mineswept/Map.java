@@ -13,7 +13,7 @@ public class Map {
 	
 	public Map(int numMines, int width, int length) {
 		
-		this.chunks = new HashMap<ChunkCoordinate, Chunk>();
+		this.chunks = new HashMap<>();
 		this.numMines = numMines;
 		this.width = width;
 		this.height = length;
@@ -116,9 +116,9 @@ public class Map {
 		
 	}
 	
-	public Chunk getChunk(ChunkCoordinate coord) {
+	public Chunk getChunk(int chunkX, int chunkY) {
 		
-		return chunks.get(coord);
+		return chunks.get(new ChunkCoordinate(chunkX, chunkY));
 		
 	}
 	

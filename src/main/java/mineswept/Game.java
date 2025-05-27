@@ -53,6 +53,19 @@ public class Game {
 
 		Game game = new Game();
 
+		try {
+			
+			game.read(new File("test-input"));
+			game.write(new File("test-output"));
+
+		} catch (FileNotFoundException e) {
+
+			e.printStackTrace();
+			System.out.println("File not found :(");
+			System.exit(-1);
+
+		}
+
 		Window window = new Window(game);
 	}
 
@@ -185,6 +198,8 @@ public class Game {
 				}
 
 			}
+
+			writer.println();
 
 		}
 
