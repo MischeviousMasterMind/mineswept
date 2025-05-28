@@ -23,7 +23,9 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 	private Image hidden, tile0, tile1, tile2, tile3, tile4, tile5, tile6, tile7, tile8, mine, flag;
 
 	private int mouseInitX, mouseInitY;
+	private int currentMouseX, currentMouseY;
 	private double initxScreenCoordinate, inityScreenCoordinate;
+	private int xMapPositionOfMouse, yMapPositionOfMouse;
 
 	public Window(Game game) {
 
@@ -59,10 +61,20 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 //				(int) (game.getxScreenCoordinate() / game.getMap().getWidth()),
 //				(int) (game.getyScreenCoordinate() / game.getMap().getHeight()));
 		
-		drawMap(g, game.getMap(), (int) getSize().getWidth()/3, (int) getSize().getHeight()/3); //temp coordinates for testing
+
+		// drawChunk(g, game.getMap().getChunk(0, 0), (int) getSize().getWidth()/2, (int) getSize().getHeight()/2);
+// 		drawMap(g, game.getMap(), (int) getSize().getWidth()/3, (int) getSize().getHeight()/3); //temp coordinates for testing
 		
 		
-// 		drawChunk(g, game.getMap().getChunk(0, 0), (int)game.getxScreenCoordinate(), (int)game.getyScreenCoordinate());
+		// drawChunk(g, game.getMap().getChunk(0, 0), (int)game.getxScreenCoordinate(), (int)game.getyScreenCoordinate());
+
+		g.setColor(Color.RED);
+		g.drawString(String.format("Map Coordinate based on Screen: (%f, %f)", game.getxScreenCoordinate(), game.getyScreenCoordinate()), 10, 20);
+		g.drawString(String.format("Mouse position (based on screen): (%d, %d)", currentMouseX, currentMouseY), 10, 40);
+		g.drawString(String.format("Map Coordinate of the Mouse: (%d, %d)",  xMapPositionOfMouse, yMapPositionOfMouse), 10, 60);
+
+		g.setColor(Color.BLUE);
+		g.drawRect(-(int)game.getxScreenCoordinate(), -(int)game.getyScreenCoordinate(), 100, 100);
 	}
 	
 	public void drawMap(Graphics g, Map map, int x, int y) {
@@ -88,7 +100,10 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 
 	}
 	
-	
+	// Screen position based off 
+	public ChunkCoordinate getChunk(int mouseX, int mouseY) {
+		return null;
+	}
 
 	public void drawTile(Graphics g, Tile tile, int x, int y) {
 		
@@ -191,14 +206,26 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 	@Override
 	public void mouseDragged(MouseEvent e) {
 
-		game.setScreenCoordinate(initxScreenCoordinate - (mouseInitX - e.getXOnScreen()), inityScreenCoordinate - (mouseInitY - e.getYOnScreen()));
+		currentMouseX = e.getX();
+		currentMouseY = e.getY();
 
-		System.out.printf("Mouse is being dragged: (%f, %f)\n", game.getxScreenCoordinate(), game.getyScreenCoordinate());
+		game.setScreenCoordinate(initxScreenCoordinate + (mouseInitX - e.getX()), inityScreenCoordinate + (mouseInitY - e.getY()));
+
+		System.out.println("Mouse is being dragged");
+
+		xMapPositionOfMouse = currentMouseX + (int)game.getxScreenCoordinate();
+		yMapPositionOfMouse = currentMouseY + (int)game.getyScreenCoordinate();
 
 	}
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
+
+		currentMouseX = e.getX();
+		currentMouseY = e.getY();
+
+		xMapPositionOfMouse = currentMouseX + (int)game.getxScreenCoordinate();
+		yMapPositionOfMouse = currentMouseY + (int)game.getyScreenCoordinate();
 
 	}
 
