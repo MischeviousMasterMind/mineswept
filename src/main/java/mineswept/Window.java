@@ -36,6 +36,7 @@ public class Window extends JPanel {
 		f.setVisible(true);
 	}
 
+	@Override
 	public void paint(Graphics g) {
 		
 		super.paintComponent(g);
@@ -43,22 +44,32 @@ public class Window extends JPanel {
 //		ChunkCoordinate currentChunkCoordinate = new ChunkCoordinate(
 //				(int) (game.getxScreenCoordinate() / game.getMap().getWidth()),
 //				(int) (game.getyScreenCoordinate() / game.getMap().getHeight()));
+		
+		drawChunk(g, game.getMap().getChunk(0, 0), 0, 0);
+		
+	}
 
-		AffineTransform tx = AffineTransform.getTranslateInstance(0, 0);
-		
-		
-		
+	public void drawChunk(Graphics g, Chunk chunk, int x, int y) {
+
+		for (int row = 0; row < chunk.getWidth(); row++) {
+
+			for (int col = 0; col < chunk.getHeight(); col++) {
+
+				drawTile(g, chunk.getTile(row, col), x + col * 100, y + row * 100);
+
+			}
+
+		}
+
 	}
 
 	public void drawTile(Graphics g, Tile tile, int x, int y) {
 		
-		Image sprite = null; 
-		
 		if(!tile.isRevealed()) {
-			((Graphics2D) g).drawImage(hidden, AffineTransform.getTranslateInstance(0, 0), null);
+			((Graphics2D) g).drawImage(hidden, AffineTransform.getTranslateInstance(x, y), null);
 			
 			if(tile.isFlagged()) {
-				((Graphics2D) g).drawImage(flag, AffineTransform.getTranslateInstance(0, 0), null);
+				((Graphics2D) g).drawImage(flag, AffineTransform.getTranslateInstance(x, y), null);
 			}
 			
 			return;
@@ -68,39 +79,39 @@ public class Window extends JPanel {
 		switch(tile.getState()) {
 			
 			default:
-				((Graphics2D) g).drawImage(tile0, AffineTransform.getTranslateInstance(0, 0), null);
+				((Graphics2D) g).drawImage(tile0, AffineTransform.getTranslateInstance(x, y), null);
 				break;
 				
 			case 1:
-				((Graphics2D) g).drawImage(tile1, AffineTransform.getTranslateInstance(0, 0), null);
+				((Graphics2D) g).drawImage(tile1, AffineTransform.getTranslateInstance(x, y), null);
 				break;
 				
 			case 2:
-				((Graphics2D) g).drawImage(tile2, AffineTransform.getTranslateInstance(0, 0), null);
+				((Graphics2D) g).drawImage(tile2, AffineTransform.getTranslateInstance(x, y), null);
 				break;
 			
 			case 3:
-				((Graphics2D) g).drawImage(tile3, AffineTransform.getTranslateInstance(0, 0), null);
+				((Graphics2D) g).drawImage(tile3, AffineTransform.getTranslateInstance(x, y), null);
 				break;
 				
 			case 4:
-				((Graphics2D) g).drawImage(tile4, AffineTransform.getTranslateInstance(0, 0), null);
+				((Graphics2D) g).drawImage(tile4, AffineTransform.getTranslateInstance(x, y), null);
 				break;
 				
 			case 5:
-				((Graphics2D) g).drawImage(tile5, AffineTransform.getTranslateInstance(0, 0), null);
+				((Graphics2D) g).drawImage(tile5, AffineTransform.getTranslateInstance(x, y), null);
 				break;
 			
 			case 6:
-				((Graphics2D) g).drawImage(tile6, AffineTransform.getTranslateInstance(0, 0), null);
+				((Graphics2D) g).drawImage(tile6, AffineTransform.getTranslateInstance(x, y), null);
 				break;
 				
 			case 7:
-				((Graphics2D) g).drawImage(tile7, AffineTransform.getTranslateInstance(0, 0), null);
+				((Graphics2D) g).drawImage(tile7, AffineTransform.getTranslateInstance(x, y), null);
 				break;
 				
 			case 8:
-				((Graphics2D) g).drawImage(tile8, AffineTransform.getTranslateInstance(0, 0), null);
+				((Graphics2D) g).drawImage(tile8, AffineTransform.getTranslateInstance(x, y), null);
 				break;
 			
 		}
