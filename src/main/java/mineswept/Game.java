@@ -239,4 +239,10 @@ public class Game {
 		return map;
 	}
 
+	public void setScreenCoordinate(double x, double y) {
+
+		xScreenCoordinate = x;
+		yScreenCoordinate = y;
+
+	}
 }
