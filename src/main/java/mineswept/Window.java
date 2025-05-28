@@ -30,6 +30,7 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 		this.game = game;
 
 		JFrame f = new JFrame("Mineswept");
+    
 		f.setSize(new Dimension(1000, 800));
 		f.setBackground(Color.white);
 		f.add(this);
@@ -45,6 +46,8 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.setVisible(true);
+		
+		
 	}
 
 	@Override
@@ -52,12 +55,14 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 		
 		super.paintComponent(g);
 		
-		ChunkCoordinate currentChunkCoordinate = new ChunkCoordinate(
-				(int) (game.getxScreenCoordinate() / game.getMap().getWidth()),
-				(int) (game.getyScreenCoordinate() / game.getMap().getHeight()));
+//		ChunkCoordinate currentChunkCoordinate = new ChunkCoordinate(
+//				(int) (game.getxScreenCoordinate() / game.getMap().getWidth()),
+//				(int) (game.getyScreenCoordinate() / game.getMap().getHeight()));
 		
-		drawChunk(g, game.getMap().getChunk(0, 0), (int)game.getxScreenCoordinate(), (int)game.getyScreenCoordinate());
-		// g.drawRect((int)game.getxScreenCoordinate(), (int)game.getyScreenCoordinate(), 10, 10);
+		drawChunk(g, game.getMap().getChunk(0, 0), (int) getSize().getWidth()/2, (int) getSize().getHeight()/2);
+		
+		
+// 		drawChunk(g, game.getMap().getChunk(0, 0), (int)game.getxScreenCoordinate(), (int)game.getyScreenCoordinate());
 	}
 
 	public void drawChunk(Graphics g, Chunk chunk, int x, int y) {
@@ -73,6 +78,8 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 		}
 
 	}
+	
+	
 
 	public void drawTile(Graphics g, Tile tile, int x, int y) {
 		
