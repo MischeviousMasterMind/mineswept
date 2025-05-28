@@ -79,6 +79,32 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 
 	}
 	
+	public ChunkCoordinate getChunkCoordinate(int mouseX, int mouseY) {
+		int x = (int) mouseX/game.getMap().getWidth();
+		int y = (int) mouseY/game.getMap().getHeight();
+		ChunkCoordinate c = new ChunkCoordinate(x, y);
+		return  c;
+	}
+	
+	public Tile getTile(int mouseX, int mouseY, ChunkCoordinate coordinate) {
+//		int tileWidth = game.getMap().getChunk(coordinate).getWidth();
+//		int tileHeight = game.getMap().getChunk(coordinate).getHeight();
+		
+		// find position of each chunk on the screen (chunk location in map * length of chunk)
+		int chunkX0 = (int) coordinate.getChunkX() * game.getMap().getChunk(coordinate).getWidth();
+		int chunkY0 = (int) coordinate.getChunkY() * game.getMap().getChunk(coordinate).getHeight();
+		
+		// find the position of the mouse in each chunk (screen coordinate - chunk coordinate)
+		int deltaX = mouseX - chunkX0;
+		int deltaY = mouseY - chunkY0;
+		
+		// find the tile position within the chunk
+		int tileX = (int) deltaX/tileWidth;
+		int tileY = (int) deltaY/tileHeight;
+		
+		return game.getMap().getChunk(coordinate).getTile(tileX, tileY);
+	}
+	
 	
 
 	public void drawTile(Graphics g, Tile tile, int x, int y) {
@@ -154,7 +180,11 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-
+		ChunkCoordinate coordinate = getChunkCoordinate(e.getX(), e.getY());
+		Chunk chunk = game.getMap().getChunk(coordinate);
+		
+		
+		
 	}
 
 	@Override
