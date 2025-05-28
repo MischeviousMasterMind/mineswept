@@ -59,10 +59,18 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 //				(int) (game.getxScreenCoordinate() / game.getMap().getWidth()),
 //				(int) (game.getyScreenCoordinate() / game.getMap().getHeight()));
 		
-		drawChunk(g, game.getMap().getChunk(0, 0), (int) getSize().getWidth()/2, (int) getSize().getHeight()/2);
+		drawChunk(g, game.getMap().getChunk(0, 0), (int) getSize().getWidth()/3, (int) getSize().getHeight()/3); //temp coordinates for testing
 		
 		
 // 		drawChunk(g, game.getMap().getChunk(0, 0), (int)game.getxScreenCoordinate(), (int)game.getyScreenCoordinate());
+	}
+	
+	public void drawMap(Graphics g, Map map, int x, int y) {
+		
+		for(Chunk chunk : map.getAllChunks()) {
+			drawChunk(g, chunk, x + chunk.getCoordinate().getChunkX() * 100, y + chunk.getCoordinate().getChunkY() * 100);
+		}
+		
 	}
 
 	public void drawChunk(Graphics g, Chunk chunk, int x, int y) {
