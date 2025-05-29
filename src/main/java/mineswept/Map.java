@@ -122,6 +122,12 @@ public class Map {
 		
 	}
 	
+	public Chunk getChunk(ChunkCoordinate coordinate) {
+		
+		return chunks.get(coordinate);
+		
+	}
+	
 	public Collection<Chunk> getAllChunks() {
 		
 		return chunks.values();
