@@ -136,8 +136,8 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 	}
 
 	public ChunkCoordinate getChunkCoordinate() {
-		int x = currentMouseX / (game.getMap().getWidth() * TILE_SIZE);
-		int y = currentMouseY / (game.getMap().getHeight() * TILE_SIZE);
+		int x = (int) ((double) xMapPositionOfMouse / (game.getMap().getWidth() * TILE_SIZE));
+		int y = (int) ((double) yMapPositionOfMouse / (game.getMap().getHeight() * TILE_SIZE));
 		ChunkCoordinate c = new ChunkCoordinate(x, y);
 		return c;
 	}
