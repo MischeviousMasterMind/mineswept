@@ -128,12 +128,6 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 		return game.getMap().getChunk(coordinate).getTile(tileX, tileY);
 	}
 	
-	// Screen position based off 
-	public ChunkCoordinate getChunk(int mouseX, int mouseY) {
-		return null;
-	}
-
-
 	public void drawTile(Graphics g, Tile tile, int x, int y) {
 		
 		AffineTransform tilePosition = AffineTransform.getTranslateInstance(x - game.getxScreenCoordinate(), y - game.getyScreenCoordinate());
