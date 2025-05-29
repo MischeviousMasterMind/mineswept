@@ -69,9 +69,9 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 		// drawChunk(g, game.getMap().getChunk(0, 0), (int)game.getxScreenCoordinate(), (int)game.getyScreenCoordinate());
 
 		g.setColor(Color.RED);
-		g.drawString(String.format("Map Coordinate based on Screen: (%f, %f)", game.getxScreenCoordinate(), game.getyScreenCoordinate()), 10, 20);
-		g.drawString(String.format("Mouse position (based on screen): (%d, %d)", currentMouseX, currentMouseY), 10, 40);
-		g.drawString(String.format("Map Coordinate of the Mouse: (%d, %d)",  xMapPositionOfMouse, yMapPositionOfMouse), 10, 60);
+		g.drawString(String.format("Map Coordinate of Screen: (%f, %f)", game.getxScreenCoordinate(), game.getyScreenCoordinate()), 10, 20);
+		g.drawString(String.format("Mouse Position on Screen: (%d, %d)", currentMouseX, currentMouseY), 10, 40);
+		g.drawString(String.format("Map Coordinate of Mouse: (%d, %d)",  xMapPositionOfMouse, yMapPositionOfMouse), 10, 60);
 
 		g.setColor(Color.BLUE);
 		g.drawRect(-(int)game.getxScreenCoordinate(), -(int)game.getyScreenCoordinate(), 100, 100);
@@ -186,8 +186,8 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 
 		System.out.println("Mouse is pressed");
 
-		mouseInitX = e.getXOnScreen();
-		mouseInitY = e.getYOnScreen();
+		mouseInitX = e.getX();
+		mouseInitY = e.getY();
 
 		initxScreenCoordinate = game.getxScreenCoordinate();
 		inityScreenCoordinate = game.getyScreenCoordinate();
