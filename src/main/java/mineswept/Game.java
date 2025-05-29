@@ -22,8 +22,8 @@ import java.util.HashMap; // import the HashMap class
 
 public class Game {
 
-	private double xScreenCoordinate;
-	private double yScreenCoordinate;
+	private int xScreenCoordinate;
+	private int yScreenCoordinate;
 	private int timeElapsed;
 	private int numOfFlags;
 	private int numOfRevealedTiles;
@@ -74,9 +74,9 @@ public class Game {
 
 		// instance variables for Game class at the top of the file
 
-		xScreenCoordinate = s.nextDouble();
+		xScreenCoordinate = s.nextInt();
 		s.nextLine();
-		yScreenCoordinate = s.nextDouble();
+		yScreenCoordinate = s.nextInt();
 		s.nextLine();
 		timeElapsed = s.nextInt();
 		s.nextLine();
@@ -207,11 +207,11 @@ public class Game {
 
 	}
 
-	public double getxScreenCoordinate() {
+	public int getxScreenCoordinate() {
 		return xScreenCoordinate;
 	}
 
-	public double getyScreenCoordinate() {
+	public int getyScreenCoordinate() {
 		return yScreenCoordinate;
 	}
 
@@ -239,7 +239,7 @@ public class Game {
 		return map;
 	}
 
-	public void setScreenCoordinate(double x, double y) {
+	public void setScreenCoordinate(int x, int y) {
 
 		xScreenCoordinate = x;
 		yScreenCoordinate = y;
