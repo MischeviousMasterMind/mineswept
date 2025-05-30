@@ -167,6 +167,8 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 		// coordinate)
 		int deltaX = xMapPositionOfMouse - chunkX0;
 		int deltaY = yMapPositionOfMouse - chunkY0;
+//		int deltaX = Math.abs(xMapPositionOfMouse - chunkX0);
+//		int deltaY = Math.abs(yMapPositionOfMouse - chunkY0);
 
 		// find the tile position within the chunk
 		int tileX = (int) (deltaX / TILE_SIZE) % game.getMap().getWidth();
