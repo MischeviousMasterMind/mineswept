@@ -36,9 +36,14 @@ public class Tile {
 	}
 	
 	public int sweep() {
-		return -1;
+		isRevealed = true;
+		return state;
 	}	
 	public boolean flag() {
-		return false;
+		if (!isRevealed) {
+			isFlagged = !isFlagged;
+			return !isFlagged;
+		}
+		return isFlagged;
 	}
 }
