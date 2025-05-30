@@ -105,6 +105,22 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 
 		g.drawRect((currentChunkCoordinate.getChunkX() * game.getMap().getWidth() + tileX) * TILE_SIZE - game.getxScreenCoordinate(), 
 			(currentChunkCoordinate.getChunkY() * game.getMap().getHeight() + tileY) * TILE_SIZE - game.getyScreenCoordinate(), TILE_SIZE, TILE_SIZE);
+		
+		g.setColor(Color.GRAY);
+
+		try {
+
+			Tile selectedTile = getTile(currentChunkCoordinate);
+			
+			g.drawString(String.format("isFlagged: %b", selectedTile.isFlagged()), 10, 120);
+			g.drawString(String.format("isRevealed: %b", selectedTile.isRevealed()), 10, 140);
+			g.drawString(String.format("tileState: %d", selectedTile.getState()), 10, 160);
+
+		} catch (NullPointerException e) {
+
+			g.drawString("Unable to get tile", 10, 120);
+
+		}
 	}
 
 	public void drawMap(Graphics g, Map map, int x, int y) {
