@@ -61,8 +61,8 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 
 		super.paintComponent(g);
 
-		// drawChunk(g, game.getMap().getChunk(0, 0));
-		// drawChunk(g, game.getMap().getChunk(1, 1));
+		 drawChunk(g, game.getMap().getChunk(0, 0));
+		 drawChunk(g, game.getMap().getChunk(1, 1));
 
 		// drawChunk(g, game.getMap().getChunk(0, 0), (int)game.getxScreenCoordinate(),
 		// (int)game.getyScreenCoordinate());
@@ -136,7 +136,7 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 		int tileX = (int) deltaX / tileWidth;
 		int tileY = (int) deltaY / tileHeight;
 
-		return game.getMap().getChunk(coordinate).getTile(tileX, tileY);
+		return game.getMap().getChunk(coordinate).getTile(tileY, tileX);
 	}
 
 	public void drawTile(Graphics g, Tile tile, int x, int y) {
@@ -146,13 +146,12 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 
 		if (!tile.isRevealed()) {
 			((Graphics2D) g).drawImage(hidden, tilePosition, null);
-
-			if (tile.isFlagged()) {
-				((Graphics2D) g).drawImage(flag, tilePosition, null);
-			}
-
 			return;
-
+		}
+		
+		if (tile.isFlagged()) {
+			((Graphics2D) g).drawImage(flag, tilePosition, null);
+			return;
 		}
 
 		switch (tile.getState()) {
@@ -210,7 +209,7 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 		tile8 = Toolkit.getDefaultToolkit().getImage("resources/tile-8.png");
 
 		mine = Toolkit.getDefaultToolkit().getImage("resources/tileMine.png");
-		flag = Toolkit.getDefaultToolkit().getImage("resources/flag.png");
+		flag = Toolkit.getDefaultToolkit().getImage("resources/flag2.png");
 	}
 
 	@Override
