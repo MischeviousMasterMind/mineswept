@@ -40,7 +40,10 @@ public class Tile {
 		return state;
 	}	
 	public boolean flag() {
-		isFlagged = !isFlagged;
-		return !isFlagged;
+		if (!isRevealed) {
+			isFlagged = !isFlagged;
+			return !isFlagged;
+		}
+		return isFlagged;
 	}
 }
