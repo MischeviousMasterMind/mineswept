@@ -166,13 +166,13 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 
 		if (!tile.isRevealed()) {
 			((Graphics2D) g).drawImage(hidden, tilePosition, null);
+			
+			if (tile.isFlagged()) {
+				((Graphics2D) g).drawImage(flag, tilePosition, null);
+			}
 			return;
 		}
-		
-		if (tile.isFlagged()) {
-			((Graphics2D) g).drawImage(flag, tilePosition, null);
-			return;
-		}
+
 
 		switch (tile.getState()) {
 
