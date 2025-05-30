@@ -36,6 +36,12 @@ public class Map {
 
 	}
 	
+	public void generateChunk(ChunkCoordinate coord) {
+		
+		chunks.put(coord, new Chunk(width, height, numMines, coord));
+		
+	}
+	
 	public ChunkCoordinate[] generateChunks(ChunkCoordinate coord) {
 		
 		ChunkCoordinate[] generated = new ChunkCoordinate[4];

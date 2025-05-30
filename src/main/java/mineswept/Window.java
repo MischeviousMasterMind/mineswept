@@ -60,9 +60,10 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 	public void paint(Graphics g) {
 		
 		super.paintComponent(g);
-
-		drawChunk(g, game.getMap().getChunk(0, 0));
-		drawChunk(g, game.getMap().getChunk(1, 1));
+		//drawMap(g, game.getMap());
+		//drawChunk(g, game.getMap().getChunk(0, 0));
+		//drawChunk(g, game.getMap().getChunk(1, 1));
+		getChunksOnScreen(g);
 		
 		
 		// drawChunk(g, game.getMap().getChunk(0, 0), (int)game.getxScreenCoordinate(), (int)game.getyScreenCoordinate());
@@ -76,7 +77,7 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 		g.drawRect(- game.getxScreenCoordinate(), - game.getyScreenCoordinate(), 100, 100);
 	}
 	
-	public void drawMap(Graphics g, Map map, int x, int y) {
+	public void drawMap(Graphics g, Map map) {
 		
 		for(Chunk chunk : map.getAllChunks()) {
 			//System.out.println(chunk); // for testing purposes
@@ -106,6 +107,37 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 	public ChunkCoordinate getChunk(int mouseX, int mouseY) {
 		return null;
 	}
+	
+	public void getChunksOnScreen(Graphics g) {
+		
+		//for(int i = game.getyScreenCoordinate(); i < Math.ceil(game.getyScreenCoordinate()*game.getMap().getHeight()*TILE_SIZE); i+=game.getMap().getHeight()*TILE_SIZE) {
+			//for(int j = game.getxScreenCoordinate(); j < Math.ceil(game.getxScreenCoordinate()*game.getMap().getWidth()*TILE_SIZE); j+=game.getMap().getWidth()) {
+				
+
+		ChunkCoordinate coord = new ChunkCoordinate(2, 2);
+		game.getMap().generateChunk(coord);
+				
+				/*
+				 * ChunkCoordinate coord = new ChunkCoordinate(j/game.getMap().getWidth()*TILE_SIZE,
+				 * i/game.getMap().getHeight()*TILE_SIZE);
+				 * 
+				 * if(game.getMap().getChunk(coord.getChunkX(), coord.getChunkY()) == null) {
+				 * //generate a new chunk
+				 * 
+				 * game.getMap().generateChunk(coord);
+				 * 
+				 * }
+				 * 
+				 * drawChunk(g, game.getMap().getChunk(coord.getChunkX(), coord.getChunkY()));
+				 */
+			//}
+		
+		//}
+		
+		
+		
+	}
+
 
 	public void drawTile(Graphics g, Tile tile, int x, int y) {
 		
