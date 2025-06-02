@@ -61,10 +61,13 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 
 		super.paintComponent(g);
 
-		 drawChunk(g, game.getMap().getChunk(0, 0));
-
-		// drawChunk(g, game.getMap().getChunk(0, 0), (int)game.getxScreenCoordinate(),
-		// (int)game.getyScreenCoordinate());
+		//drawMap(g, game.getMap());
+		//drawChunk(g, game.getMap().getChunk(0, 0));
+		//drawChunk(g, game.getMap().getChunk(1, 1));
+		getChunksOnScreen(g);
+		
+		
+		// drawChunk(g, game.getMap().getChunk(0, 0), (int)game.getxScreenCoordinate(), (int)game.getyScreenCoordinate());
 
 		g.setColor(Color.RED);
 		g.drawString(String.format("Map Coordinate of Screen: (%d, %d)", game.getxScreenCoordinate(),
@@ -104,6 +107,9 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 
 		g.drawRect((currentChunkCoordinate.getChunkX() * game.getMap().getWidth() + tileX) * TILE_SIZE - game.getxScreenCoordinate(), 
 			(currentChunkCoordinate.getChunkY() * game.getMap().getHeight() + tileY) * TILE_SIZE - game.getyScreenCoordinate(), TILE_SIZE, TILE_SIZE);
+
+	public void drawMap(Graphics g, Map map) {
+
 		
 		g.setColor(Color.GRAY);
 
@@ -173,6 +179,37 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 
 		return game.getMap().getChunk(coordinate).getTile(tileY, tileX);
 	}
+	
+	public void getChunksOnScreen(Graphics g) {
+		
+		//for(int i = game.getyScreenCoordinate(); i < Math.ceil(game.getyScreenCoordinate()*game.getMap().getHeight()*TILE_SIZE); i+=game.getMap().getHeight()*TILE_SIZE) {
+			//for(int j = game.getxScreenCoordinate(); j < Math.ceil(game.getxScreenCoordinate()*game.getMap().getWidth()*TILE_SIZE); j+=game.getMap().getWidth()) {
+				
+
+		ChunkCoordinate coord = new ChunkCoordinate(2, 2);
+		game.getMap().generateChunk(coord);
+				
+				/*
+				 * ChunkCoordinate coord = new ChunkCoordinate(j/game.getMap().getWidth()*TILE_SIZE,
+				 * i/game.getMap().getHeight()*TILE_SIZE);
+				 * 
+				 * if(game.getMap().getChunk(coord.getChunkX(), coord.getChunkY()) == null) {
+				 * //generate a new chunk
+				 * 
+				 * game.getMap().generateChunk(coord);
+				 * 
+				 * }
+				 * 
+				 * drawChunk(g, game.getMap().getChunk(coord.getChunkX(), coord.getChunkY()));
+				 */
+			//}
+		
+		//}
+		
+		
+		
+	}
+
 
 	public void drawTile(Graphics g, Tile tile, int x, int y) {
 

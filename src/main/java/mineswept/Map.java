@@ -39,7 +39,7 @@ public class Map {
 		chunks.put(coord, new Chunk(width, height, numMines, coord));
 
 	}
-
+  
 	public ChunkCoordinate[] generateChunks(ChunkCoordinate coord) {
 		
 		ChunkCoordinate[] generated = new ChunkCoordinate[4];
