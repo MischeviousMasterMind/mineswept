@@ -124,7 +124,7 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 			g.drawString(String.format("isRevealed: %b", selectedTile.isRevealed()), 10, 140);
 			g.drawString(String.format("tileState: %d", selectedTile.getState()), 10, 160);
 
-		} catch (NullPointerException e) {
+		} catch (NullPointerException | IndexOutOfBoundsException e) {
 
 			g.drawString("Unable to get tile", 10, 120);
 
