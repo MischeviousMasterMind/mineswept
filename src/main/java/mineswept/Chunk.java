@@ -23,6 +23,7 @@ public class Chunk {
 
 		this.width = width;
 		this.height = height;
+		this.numOfMines = numOfMines;
 		this.coordinate = coordinate;
 
 		seed = new BigInteger(numOfConfigurations().bitLength(), 0, random).mod(numOfConfigurations());
@@ -34,6 +35,7 @@ public class Chunk {
 
 		this.width = width;
 		this.height = height;
+		this.numOfMines = numOfMines;
 		this.coordinate = coordinate;
 		this.seed = seed;
 
@@ -85,27 +87,27 @@ public class Chunk {
 	// TODO Implement method
 	private void generate() {
 
+		tiles = new Tile[width][height];
+
 		BigInteger temp = seed;
 
 		int count = 0;
 
 		for (int i = 0; i < width; i++) {
 			for (int ii = 0; ii < height; ii++) {
-				System.out.print("Comparing " + temp + " to: "
-						+ nCr(width * height - i * height - ii - 1, numOfMines - 1 - count));
 
-				if (temp.compareTo(nCr(width * height - i * height - ii - 1, numOfMines - 1 - count)) >= 0
-						&& !temp.equals(BigInteger.ZERO)) {
-					System.out.println(" SUBTRACTING!");
+				if (count == numOfMines || (temp.compareTo(nCr(width * height - i * height - ii - 1, numOfMines - 1 - count)) >= 0
+						&& !temp.equals(BigInteger.ZERO))) {
+
 					temp = temp.subtract(nCr(width * height - i * height - ii - 1, numOfMines - 1 - count));
-				} else {
-					System.out.println(" adding a mine!");
-					tiles[i][ii] = new Tile(false, false, 9);
-					count++;
 
-					if (count == numOfMines) {
-						return;
-					}
+					tiles[i][ii] = new Tile(true, false, 0);
+
+				} else {
+
+					tiles[i][ii] = new Tile(true, false, 9);
+					count++;
+					
 				}
 			}
 		}
@@ -114,24 +116,25 @@ public class Chunk {
 
 	public final BigInteger numOfConfigurations() {
 
-		return nCr(width * height, numOfMines);
+		return nCr(this.width * this.height, this.numOfMines);
 
 	}
 
-	private BigInteger nCr(int n, int r) {
+	public static BigInteger nCr(int n, int r) {
 
-		return factorial(n).divide(factorial(n - r)).divide(factorial(r));
+		return (factorial(n).divide(factorial(n - r))).divide(factorial(r));
 
 	}
 
-	private BigInteger factorial(int n) {
+	private static BigInteger factorial(int n) {
 
-		BigInteger number = BigInteger.valueOf(n);
-
-		if (n == 0)
+		if (n <= 0) {
 			return BigInteger.ONE;
+		}
 
-		for (int i = 2; i < n; i++) {
+		BigInteger number = BigInteger.ONE;
+
+		for (int i = n; i > 1; i--) {
 			number = number.multiply(BigInteger.valueOf(i));
 		}
 
