@@ -21,7 +21,7 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 	public final static int TILE_SIZE = 100;
 
 	private Game game;
-	
+
 	private Image hidden, tile0, tile1, tile2, tile3, tile4, tile5, tile6, tile7, tile8, mine, flag;
 
 	private int mouseInitX, mouseInitY;
@@ -36,7 +36,7 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 		this.game = game;
 
 		JFrame f = new JFrame("Mineswept");
-    
+
 		f.setSize(new Dimension(1000, 800));
 		f.setBackground(Color.white);
 		f.add(this);
@@ -44,22 +44,23 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 
 		addMouseListener(this);
 		addMouseMotionListener(this);
-		
+
 		initializeSprites();
-		
+
 		Timer t = new Timer(0, this);
 		t.start();
 
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.setVisible(true);
-		
+
 		zoom = 1.0;
 	}
 
 	@Override
 	public void paint(Graphics g) {
-		
+
 		super.paintComponent(g);
+
 		//drawMap(g, game.getMap());
 		//drawChunk(g, game.getMap().getChunk(0, 0));
 		//drawChunk(g, game.getMap().getChunk(1, 1));
@@ -68,22 +69,78 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 		
 		// drawChunk(g, game.getMap().getChunk(0, 0), (int)game.getxScreenCoordinate(), (int)game.getyScreenCoordinate());
 
+		debug(g);
+
+	}
+
+	public void debug(Graphics g) {
+
 		g.setColor(Color.RED);
-		g.drawString(String.format("Map Coordinate of Screen: (%d, %d)", game.getxScreenCoordinate(), game.getyScreenCoordinate()), 10, 20);
+		g.drawString(String.format("Map Coordinate of Screen: (%d, %d)", game.getxScreenCoordinate(),
+				game.getyScreenCoordinate()), 10, 20);
 		g.drawString(String.format("Mouse Position on Screen: (%d, %d)", currentMouseX, currentMouseY), 10, 40);
-		g.drawString(String.format("Map Coordinate of Mouse: (%d, %d)",  xMapPositionOfMouse, yMapPositionOfMouse), 10, 60);
+		g.drawString(String.format("Map Coordinate of Mouse: (%d, %d)", xMapPositionOfMouse, yMapPositionOfMouse), 10, 60);
+
+		ChunkCoordinate currentChunkCoordinate = getChunkCoordinate();
+
+		g.drawString(String.format("Selected Chunk Coordinate: (%d, %d)", currentChunkCoordinate.getChunkX(), currentChunkCoordinate.getChunkY()), 10, 80);
 
 		g.setColor(Color.BLUE);
-		g.drawRect(- game.getxScreenCoordinate(), - game.getyScreenCoordinate(), 100, 100);
-	}
+
+		g.drawRect(currentChunkCoordinate.getChunkX() * game.getMap().getWidth() * TILE_SIZE - game.getxScreenCoordinate(), 
+			currentChunkCoordinate.getChunkY() * game.getMap().getHeight() * TILE_SIZE - game.getyScreenCoordinate(), game.getMap().getWidth() * TILE_SIZE, game.getMap().getHeight() * TILE_SIZE);
 	
-	public void drawMap(Graphics g, Map map) {
-		
-		for(Chunk chunk : map.getAllChunks()) {
-			//System.out.println(chunk); // for testing purposes
+		g.setColor(Color.RED);
+
+		int tileWidth = 100;
+		int tileHeight = 100;
+
+		// find position of each chunk on the screen (chunk location in map * length of
+		// chunk)
+		int chunkX0 = (int) currentChunkCoordinate.getChunkX() * game.getMap().getWidth();
+		int chunkY0 = (int) currentChunkCoordinate.getChunkY() * game.getMap().getHeight();
+
+		// find the position of the mouse in each chunk (screen coordinate - chunk
+		// coordinate)
+		int deltaX = xMapPositionOfMouse - chunkX0;
+		int deltaY = yMapPositionOfMouse - chunkY0;
+
+		// find the tile position within the chunk
+		int tileX = (int) (deltaX / tileWidth) % game.getMap().getWidth();
+		int tileY = (int) (deltaY / tileHeight) % game.getMap().getHeight();
+
+		g.drawString(String.format("Selected Tile Coordinate: (%d, %d)", tileX, tileY), 10, 100);
+
+		g.drawRect((currentChunkCoordinate.getChunkX() * game.getMap().getWidth() + tileX) * TILE_SIZE - game.getxScreenCoordinate(), 
+			(currentChunkCoordinate.getChunkY() * game.getMap().getHeight() + tileY) * TILE_SIZE - game.getyScreenCoordinate(), TILE_SIZE, TILE_SIZE);
+
+		g.setColor(Color.GRAY);
+
+		try {
+
+			Tile selectedTile = getTile(currentChunkCoordinate);
+			
+			g.drawString(String.format("isFlagged: %b", selectedTile.isFlagged()), 10, 120);
+			g.drawString(String.format("isRevealed: %b", selectedTile.isRevealed()), 10, 140);
+			g.drawString(String.format("tileState: %d", selectedTile.getState()), 10, 160);
+
+		} catch (NullPointerException e) {
+
+			g.drawString("Unable to get tile", 10, 120);
+
+		}
+
+		g.setColor(Color.BLACK);
+
+	}
+
+	public void drawMap(Graphics g, Map map, int x, int y) {
+
+		for (Chunk chunk : map.getAllChunks()) {
+			// System.out.println(chunk); // for testing purposes
 			drawChunk(g, chunk);
 		}
-		
+
 	}
 
 	public void drawChunk(Graphics g, Chunk chunk) {
@@ -102,10 +159,31 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 		}
 
 	}
-	
-	// Screen position based off 
-	public ChunkCoordinate getChunk(int mouseX, int mouseY) {
-		return null;
+
+	public ChunkCoordinate getChunkCoordinate() {
+		int x = (int) ((double) xMapPositionOfMouse / (game.getMap().getWidth() * TILE_SIZE));
+		int y = (int) ((double) yMapPositionOfMouse / (game.getMap().getHeight() * TILE_SIZE));
+		ChunkCoordinate c = new ChunkCoordinate(x, y);
+		return c;
+	}
+
+	public Tile getTile(ChunkCoordinate coordinate) {
+
+		// find position of each chunk on the screen (chunk location in map * length of
+		// chunk)
+		int chunkX0 = (int) coordinate.getChunkX() * game.getMap().getWidth();
+		int chunkY0 = (int) coordinate.getChunkY() * game.getMap().getHeight();
+
+		// find the position of the mouse in each chunk (screen coordinate - chunk
+		// coordinate)
+		int deltaX = xMapPositionOfMouse - chunkX0;
+		int deltaY = yMapPositionOfMouse - chunkY0;
+
+		// find the tile position within the chunk
+		int tileX = (int) (deltaX / TILE_SIZE) % game.getMap().getWidth();
+		int tileY = (int) (deltaY / TILE_SIZE) % game.getMap().getHeight();
+
+		return game.getMap().getChunk(coordinate).getTile(tileY, tileX);
 	}
 	
 	public void getChunksOnScreen(Graphics g) {
@@ -140,81 +218,94 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 
 
 	public void drawTile(Graphics g, Tile tile, int x, int y) {
-		
-		AffineTransform tilePosition = AffineTransform.getTranslateInstance(x - game.getxScreenCoordinate(), y - game.getyScreenCoordinate());
 
-		if(!tile.isRevealed()) {
+		AffineTransform tilePosition = AffineTransform.getTranslateInstance(x - game.getxScreenCoordinate(),
+				y - game.getyScreenCoordinate());
+
+		if (!tile.isRevealed()) {
 			((Graphics2D) g).drawImage(hidden, tilePosition, null);
 			
-			if(tile.isFlagged()) {
+			if (tile.isFlagged()) {
 				((Graphics2D) g).drawImage(flag, tilePosition, null);
 			}
-			
 			return;
-			
-		} 
-		
-		switch(tile.getState()) {
-			
+		}
+
+
+		switch (tile.getState()) {
+
 			default:
 				((Graphics2D) g).drawImage(tile0, tilePosition, null);
 				break;
-				
+
 			case 1:
 				((Graphics2D) g).drawImage(tile1, tilePosition, null);
 				break;
-				
+
 			case 2:
 				((Graphics2D) g).drawImage(tile2, tilePosition, null);
 				break;
-			
+
 			case 3:
 				((Graphics2D) g).drawImage(tile3, tilePosition, null);
 				break;
-				
+
 			case 4:
 				((Graphics2D) g).drawImage(tile4, tilePosition, null);
 				break;
-				
+
 			case 5:
 				((Graphics2D) g).drawImage(tile5, tilePosition, null);
 				break;
-			
+
 			case 6:
 				((Graphics2D) g).drawImage(tile6, tilePosition, null);
 				break;
-				
+
 			case 7:
 				((Graphics2D) g).drawImage(tile7, tilePosition, null);
 				break;
-				
+
 			case 8:
 				((Graphics2D) g).drawImage(tile8, tilePosition, null);
 				break;
 			
+			case 9:
+				((Graphics2D) g).drawImage(mine, tilePosition, null);
+				break;
 		}
 	}
 
 	private void initializeSprites() {
-		hidden  = Toolkit.getDefaultToolkit().getImage("resources/tileHidden.png");
-		tile0   = Toolkit.getDefaultToolkit().getImage("resources/tile-0.png");
-		
-		tile1   = Toolkit.getDefaultToolkit().getImage("resources/tile-1.png");
-		tile2   = Toolkit.getDefaultToolkit().getImage("resources/tile-2.png");
-		tile3   = Toolkit.getDefaultToolkit().getImage("resources/tile-3.png");
-		tile4   = Toolkit.getDefaultToolkit().getImage("resources/tile-4.png");
-		tile5   = Toolkit.getDefaultToolkit().getImage("resources/tile-5.png");
-		tile6   = Toolkit.getDefaultToolkit().getImage("resources/tile-6.png");
-		tile7   = Toolkit.getDefaultToolkit().getImage("resources/tile-7.png");
-		tile8   = Toolkit.getDefaultToolkit().getImage("resources/tile-8.png");
-		
-		mine    = Toolkit.getDefaultToolkit().getImage("resources/tileMine.png");
-		flag    = Toolkit.getDefaultToolkit().getImage("resources/flag.png");
+		hidden = Toolkit.getDefaultToolkit().getImage("resources/tileHidden.png");
+		tile0 = Toolkit.getDefaultToolkit().getImage("resources/tile-0.png");
+
+		tile1 = Toolkit.getDefaultToolkit().getImage("resources/tile-1.png");
+		tile2 = Toolkit.getDefaultToolkit().getImage("resources/tile-2.png");
+		tile3 = Toolkit.getDefaultToolkit().getImage("resources/tile-3.png");
+		tile4 = Toolkit.getDefaultToolkit().getImage("resources/tile-4.png");
+		tile5 = Toolkit.getDefaultToolkit().getImage("resources/tile-5.png");
+		tile6 = Toolkit.getDefaultToolkit().getImage("resources/tile-6.png");
+		tile7 = Toolkit.getDefaultToolkit().getImage("resources/tile-7.png");
+		tile8 = Toolkit.getDefaultToolkit().getImage("resources/tile-8.png");
+
+		mine = Toolkit.getDefaultToolkit().getImage("resources/tileMine.png");
+		flag = Toolkit.getDefaultToolkit().getImage("resources/flag2.png");
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
+		ChunkCoordinate coordinate = getChunkCoordinate();
+		Chunk chunk = game.getMap().getChunk(coordinate);
+		Tile tile = getTile(coordinate);
 
+		if (e.getButton() == MouseEvent.BUTTON1) { // left click
+			tile.sweep();
+		} else if (e.getButton() == MouseEvent.BUTTON2) { // right click
+			tile.flag();
+		} else if (e.getButton() == MouseEvent.BUTTON3) { // scroll wheel
+			// clear a bunch of space
+		}
 	}
 
 	@Override
@@ -245,12 +336,13 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 		currentMouseX = e.getX();
 		currentMouseY = e.getY();
 
-		game.setScreenCoordinate(initxScreenCoordinate + (mouseInitX - e.getX()), inityScreenCoordinate + (mouseInitY - e.getY()));
+		game.setScreenCoordinate(initxScreenCoordinate + (mouseInitX - e.getX()),
+				inityScreenCoordinate + (mouseInitY - e.getY()));
 
 		System.out.println("Mouse is being dragged");
 
-		xMapPositionOfMouse = currentMouseX + (int)game.getxScreenCoordinate();
-		yMapPositionOfMouse = currentMouseY + (int)game.getyScreenCoordinate();
+		xMapPositionOfMouse = currentMouseX + (int) game.getxScreenCoordinate();
+		yMapPositionOfMouse = currentMouseY + (int) game.getyScreenCoordinate();
 
 	}
 
@@ -260,8 +352,8 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 		currentMouseX = e.getX();
 		currentMouseY = e.getY();
 
-		xMapPositionOfMouse = currentMouseX + (int)game.getxScreenCoordinate();
-		yMapPositionOfMouse = currentMouseY + (int)game.getyScreenCoordinate();
+		xMapPositionOfMouse = e.getX() + game.getxScreenCoordinate();
+		yMapPositionOfMouse = e.getY() + game.getyScreenCoordinate();
 
 	}
 

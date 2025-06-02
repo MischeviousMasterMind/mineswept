@@ -5,26 +5,24 @@ import java.util.HashMap;
 
 public class Map {
 	
-	private HashMap<ChunkCoordinate, Chunk> chunks;
-	private int numMines;
-	private int width;
-	private int height;
+	private final HashMap<ChunkCoordinate, Chunk> chunks;
+	private final int numMines;
+	private final int width;
+	private final int height;
 	
 	
-	public Map(int numMines, int width, int length) {
+	public Map(int numMines, int width, int height) {
 		
 		this.chunks = new HashMap<>();
 		this.numMines = numMines;
 		this.width = width;
-		this.height = length;
+		this.height = height;
  		
 		//put a new chunk into the hashmap, and set the coords to (0,0)
 		ChunkCoordinate newChunkCoord = new ChunkCoordinate(0, 0);
-		Chunk newChunk = new Chunk(width, length, numMines, newChunkCoord);
+		Chunk newChunk = new Chunk(width, height, numMines, newChunkCoord);
 		
 		chunks.put(newChunkCoord, newChunk);
-
-		
 	}
 	
 	public Map(int numMines, int width, int length, HashMap<ChunkCoordinate, Chunk> chunks) {
@@ -37,11 +35,11 @@ public class Map {
 	}
 	
 	public void generateChunk(ChunkCoordinate coord) {
-		
+
 		chunks.put(coord, new Chunk(width, height, numMines, coord));
-		
+
 	}
-	
+  
 	public ChunkCoordinate[] generateChunks(ChunkCoordinate coord) {
 		
 		ChunkCoordinate[] generated = new ChunkCoordinate[4];
@@ -125,6 +123,12 @@ public class Map {
 	public Chunk getChunk(int chunkX, int chunkY) {
 		
 		return chunks.get(new ChunkCoordinate(chunkX, chunkY));
+		
+	}
+	
+	public Chunk getChunk(ChunkCoordinate coordinate) {
+		
+		return chunks.get(coordinate);
 		
 	}
 	
