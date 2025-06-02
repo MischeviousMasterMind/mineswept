@@ -62,7 +62,6 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 		super.paintComponent(g);
 
 		 drawChunk(g, game.getMap().getChunk(0, 0));
-		 drawChunk(g, game.getMap().getChunk(1, 1));
 
 		// drawChunk(g, game.getMap().getChunk(0, 0), (int)game.getxScreenCoordinate(),
 		// (int)game.getyScreenCoordinate());
@@ -227,7 +226,10 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 			case 8:
 				((Graphics2D) g).drawImage(tile8, tilePosition, null);
 				break;
-
+			
+			case 9:
+				((Graphics2D) g).drawImage(mine, tilePosition, null);
+				break;
 		}
 	}
 
@@ -307,8 +309,8 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 		currentMouseX = e.getX();
 		currentMouseY = e.getY();
 
-		xMapPositionOfMouse = currentMouseX + (int) game.getxScreenCoordinate();
-		yMapPositionOfMouse = currentMouseY + (int) game.getyScreenCoordinate();
+		xMapPositionOfMouse = e.getX() + game.getxScreenCoordinate();
+		yMapPositionOfMouse = e.getY() + game.getyScreenCoordinate();
 
 	}
 

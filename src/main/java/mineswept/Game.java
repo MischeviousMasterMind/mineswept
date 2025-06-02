@@ -33,7 +33,9 @@ public class Game {
 	private static long window;
 	private Map map;
 
-	public Game() {
+	public Game(Map map) {
+
+		this.map = map;
 
 	}
 
@@ -51,20 +53,21 @@ public class Game {
 
 	public static void main(String[] args) {
 
-		Game game = new Game();
+		Map map = new Map(32, 16, 16);
+		Game game = new Game(map);
 
-		try {
+		// try {
 			
-			game.read(new File("test-input"));
-			game.write(new File("test-output"));
+		// 	game.read(new File("test-input"));
+		// 	game.write(new File("test-output"));
 
-		} catch (FileNotFoundException e) {
+		// } catch (FileNotFoundException e) {
 
-			e.printStackTrace();
-			System.out.println("File not found :(");
-			System.exit(-1);
+		// 	e.printStackTrace();
+		// 	System.out.println("File not found :(");
+		// 	System.exit(-1);
 
-		}
+		// }
 
 		Window window = new Window(game);
 	}
