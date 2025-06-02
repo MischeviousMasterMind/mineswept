@@ -35,7 +35,7 @@ public class Map {
 	}
 	
 	public void generateChunk(ChunkCoordinate coord) {
-
+		
 		chunks.put(coord, new Chunk(width, height, numMines, coord));
 
 	}
