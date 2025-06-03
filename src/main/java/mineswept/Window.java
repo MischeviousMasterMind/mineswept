@@ -55,7 +55,7 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 
 		zoom = 1.0;
 	}
-
+    
 	@Override
 	public void paint(Graphics g) {
 
@@ -262,6 +262,16 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 			tile.flag();
 		} else if (e.getButton() == MouseEvent.BUTTON3) { // scroll wheel
 			// clear a bunch of space
+		}
+	}
+	
+	public void helperSweep(Map map, Tile tile) {
+		if (tile.getX() < 0 || tile.getX() > 7 ||
+			tile.getY() < 0 || tile.getY() > 7 ||
+			tile.getState() != 0) {
+			tile.sweep();
+		} else {
+//			helperSweep(map, adjacent tile); x8
 		}
 	}
 
