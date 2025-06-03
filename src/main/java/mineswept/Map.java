@@ -1,5 +1,6 @@
 package mineswept;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
@@ -119,6 +120,88 @@ public class Map {
 		
 		return generated; 
 		
+	}
+
+	public ArrayList<Chunk> getNeighboringChunks(ChunkCoordinate coord) {
+
+		ArrayList<Chunk> neighboringChunks = new ArrayList<>();
+
+		for (int i = -1; i <=  1; i++) {
+
+			for (int ii = -1; ii <= 1; ii++) {
+
+				int x = coord.getChunkX();
+				int y = coord.getChunkY();
+
+				if ((i == x && ii == y) || (x + i < 0) || (x + i >= width) || (y + ii < 0) || (y + ii >= height)) {
+
+					continue;
+
+				}
+
+				Chunk neighborChunk = chunks.get(new ChunkCoordinate(x + i, y + ii));
+
+				if (neighborChunk != null) {
+
+					neighboringChunks.add(neighborChunk);
+
+				}
+
+			}
+
+		}
+
+		return neighboringChunks;
+	}
+
+	public void updateChunkBorder(ChunkCoordinate coord) {
+
+		Chunk currentChunk = getChunk(coord);
+
+		for (Chunk neighborChunk : getNeighboringChunks(coord)) {
+
+			int deltaX = (coord.getChunkX() - neighborChunk.getCoordinate().getChunkX()) * width;
+			int deltaY = (coord.getChunkY() - neighborChunk.getCoordinate().getChunkY()) * height;
+
+			for (int i = 0; i < height; i++) {
+
+				for (Tile tile : currentChunk.getNeighboringTiles(deltaY, i)) {
+
+					if (neighborChunk.getTile(0, i).getState() == 9) {
+						tile.incrementState();
+					}
+				}
+
+				for (Tile tile : currentChunk.getNeighboringTiles(deltaY + height - 1, i)) {
+
+					if (neighborChunk.getTile(height - 1, i).getState() == 9) {
+						tile.incrementState();
+					}
+
+				}
+
+			}
+
+			for (int i = 1; i < width - 1; i++) {
+
+				for (Tile tile : currentChunk.getNeighboringTiles(i, deltaX)) {
+
+					if (neighborChunk.getTile(i, 0).getState() == 9) {
+						tile.incrementState();
+					}	
+				}
+
+				for (Tile tile : currentChunk.getNeighboringTiles(i, deltaX + width - 1)) {
+
+					if (neighborChunk.getTile(i, width - 1).getState() == 9) {
+						tile.incrementState();
+					}
+
+				}
+
+			}
+		}
+
 	}
 	
 	public Chunk getChunk(int chunkX, int chunkY) {

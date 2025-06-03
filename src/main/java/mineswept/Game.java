@@ -54,6 +54,10 @@ public class Game {
 	public static void main(String[] args) {
 
 		Map map = new Map(32, 16, 16);
+		// map.generateChunk(new ChunkCoordinate(1, 0));
+
+		// map.updateChunkBorder(new ChunkCoordinate(0, 0));
+		// map.updateChunkBorder(new ChunkCoordinate(1, 0));
 		Game game = new Game(map);
 
 		// try {
