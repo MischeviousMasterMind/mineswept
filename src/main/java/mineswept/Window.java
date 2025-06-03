@@ -62,7 +62,7 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 		super.paintComponent(g);
 
 		//drawMap(g, game.getMap());
-		//drawChunk(g, game.getMap().getChunk(0, 0));
+		drawChunk(g, game.getMap().getChunk(0, 0));
 		//drawChunk(g, game.getMap().getChunk(1, 1));
 		getChunksOnScreen(g);
 		
@@ -305,6 +305,8 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 
 		if (e.getButton() == MouseEvent.BUTTON1) { // left click
 			tile.sweep();
+
+			
 		} else if (e.getButton() == MouseEvent.BUTTON2) { // right click
 			tile.flag();
 		} else if (e.getButton() == MouseEvent.BUTTON3) { // scroll wheel

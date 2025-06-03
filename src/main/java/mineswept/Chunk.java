@@ -1,6 +1,7 @@
 package mineswept;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Chunk {
@@ -52,6 +53,33 @@ public class Chunk {
 
 	}
 
+	public ArrayList<Tile> getNeighboringTiles(int x, int y) {
+
+		ArrayList<Tile> neighboringTiles = new ArrayList<>();
+
+		for (int i = -1; i <=  1; i++) {
+
+			for (int ii = -1; ii <= 1; ii++) {
+
+				if ((i == x && ii == y) || (x + i < 0) || (x + i >= width) || (y + ii < 0) || (y + ii >= height)) {
+
+					continue;
+
+				}
+
+				if (tiles[x + i][y + ii] != null) {
+
+					neighboringTiles.add(tiles[x + i][y + ii]);
+
+				}
+
+			}
+
+		}
+
+		return neighboringTiles;
+	}
+
 	public int getNumOfTilesSweeped() {
 		return numOfTilesSweeped;
 	}
@@ -94,18 +122,35 @@ public class Chunk {
 		int count = 0;
 
 		for (int i = 0; i < width; i++) {
+
+			for (int ii = 0; ii < height; ii++) {
+
+				tiles[i][ii] = new Tile(true, false, 0);
+
+			}
+
+		}
+
+		for (int i = 0; i < width; i++) {
 			for (int ii = 0; ii < height; ii++) {
 
 				if (count == numOfMines || (temp.compareTo(nCr(width * height - i * height - ii - 1, numOfMines - 1 - count)) >= 0
 						&& !temp.equals(BigInteger.ZERO))) {
 
-					temp = temp.subtract(nCr(width * height - i * height - ii - 1, numOfMines - 1 - count));
-
-					tiles[i][ii] = new Tile(true, false, 0);
+					temp = temp.subtract(nCr(width * height - i * height - ii - 1, numOfMines - 1 - count));	
 
 				} else {
 
-					tiles[i][ii] = new Tile(true, false, 9);
+					tiles[i][ii].setState(9);
+
+					for (Tile neighboringTile : getNeighboringTiles(i, ii)) {
+
+						if (neighboringTile.getState() < 9) {
+							neighboringTile.incrementState();
+						}
+
+					}
+
 					count++;
 					
 				}
