@@ -271,7 +271,9 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 			tile.getState() != 0) {
 			tile.sweep();
 		} else {
-//			helperSweep(map, adjacent tile); x8
+			for (Tile neighboringTile : tile.getNeighboringTiles(tile.getX(), tile.getY()) {
+				helperSweep(map, neighboringTile);
+			}
 		}
 	}
 
