@@ -34,6 +34,9 @@ public class Tile {
 	public void setState(int state) {
 		this.state = state;
 	}
+	public void incrementState() {
+		state++;
+	}
 	
 	public int sweep() {
 		isRevealed = true;

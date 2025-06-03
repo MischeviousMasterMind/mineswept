@@ -33,7 +33,8 @@ public class Map {
 		this.height = length;
 
 	}
-	
+
+
 	public void generateChunk(ChunkCoordinate coord) {
 
 		chunks.put(coord, new Chunk(width, height, numMines, coord));
