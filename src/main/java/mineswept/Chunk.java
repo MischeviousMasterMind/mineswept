@@ -125,7 +125,7 @@ public class Chunk {
 
 			for (int ii = 0; ii < height; ii++) {
 
-				tiles[i][ii] = new Tile(true, false, 0);
+				tiles[i][ii] = new Tile(false, false, 0, this, i, ii);
 
 			}
 

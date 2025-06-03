@@ -55,7 +55,7 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 
 		zoom = 1.0;
 	}
-
+    
 	@Override
 	public void paint(Graphics g) {
 
@@ -305,14 +305,29 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 
 		if (e.getButton() == MouseEvent.BUTTON1) { // left click
 			tile.sweep();
-
-			
+			helperSweep(game.getMap(), tile);			
 		} else if (e.getButton() == MouseEvent.BUTTON2) { // right click
 			tile.flag();
 		} else if (e.getButton() == MouseEvent.BUTTON3) { // scroll wheel
 			// clear a bunch of space
 		}
 	}
+	
+	public void helperSweep(Map map, Tile tile) {
+		if (!tile.isRevealed()) {
+	        tile.sweep();
+	    }
+
+	    if (tile.getState() == 0) {
+	        for (Tile neighboringTile : tile.getChunk().getNeighboringTiles(tile.getX(), tile.getY())) {
+	            if (!neighboringTile.isRevealed()) {
+	                helperSweep(map, neighboringTile);
+	            }
+	        }
+	    }
+	}
+
+
 
 	@Override
 	public void mousePressed(MouseEvent e) {
