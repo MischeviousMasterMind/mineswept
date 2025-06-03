@@ -63,7 +63,7 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 
 		//drawMap(g, game.getMap());
 		drawChunk(g, game.getMap().getChunk(0, 0));
-		drawChunk(g, game.getMap().getChunk(1, 0));
+		// drawChunk(g, game.getMap().getChunk(1, 0));
 		getChunksOnScreen(g);
 		
 		
