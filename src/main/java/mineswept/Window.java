@@ -304,7 +304,8 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 		Tile tile = getTile(coordinate);
 
 		if (e.getButton() == MouseEvent.BUTTON1) { // left click
-			helperSweep(game.getMap(), chunk, tile);			
+			tile.sweep();
+			helperSweep(game.getMap(), tile);			
 		} else if (e.getButton() == MouseEvent.BUTTON2) { // right click
 			tile.flag();
 		} else if (e.getButton() == MouseEvent.BUTTON3) { // scroll wheel
@@ -312,17 +313,21 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 		}
 	}
 	
-	public void helperSweep(Map map, Chunk chunk, Tile tile) {
-		if (tile.getX() < 0 || tile.getX() > 7 ||
-			tile.getY() < 0 || tile.getY() > 7 ||
-			tile.getState() != 0) {
-			tile.sweep();
-		} else {
-			for (Tile neighboringTile : chunk.getNeighboringTiles(tile.getX(), tile.getY())) {
-				helperSweep(map, chunk, neighboringTile);
-			} 
-		} 
+	public void helperSweep(Map map, Tile tile) {
+		if (!tile.isRevealed()) {
+	        tile.sweep();
+	    }
+
+	    if (tile.getState() == 0) {
+	        for (Tile neighboringTile : tile.getChunk().getNeighboringTiles(tile.getX(), tile.getY())) {
+	            if (!neighboringTile.isRevealed()) {
+	                helperSweep(map, neighboringTile);
+	            }
+	        }
+	    }
 	}
+
+
 
 	@Override
 	public void mousePressed(MouseEvent e) {
