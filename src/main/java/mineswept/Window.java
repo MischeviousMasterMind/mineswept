@@ -66,6 +66,8 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 		//drawChunk(g, game.getMap().getChunk(1, 1));
 		getChunksOnScreen(g);
 		
+	
+		
 		
 		// drawChunk(g, game.getMap().getChunk(0, 0), (int)game.getxScreenCoordinate(), (int)game.getyScreenCoordinate());
 
@@ -188,15 +190,15 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 	
 	public void getChunksOnScreen(Graphics g) {
 		
-		for(int i = 0; i < 1; i++) {
-			for(int j = 0; j <1; j++) {
+		for(int i = (int) ((double) inityScreenCoordinate/(game.getMap().getHeight() * TILE_SIZE)); i < Math.ceil((inityScreenCoordinate+getSize().getHeight())/(game.getMap().getHeight() * TILE_SIZE)); i++) {
+			for(int j = (int) ((double)initxScreenCoordinate/(game.getMap().getWidth() * TILE_SIZE)); j < Math.ceil((initxScreenCoordinate+getSize().getWidth())/(game.getMap().getWidth() * TILE_SIZE)); j++) {
 				
-				  ChunkCoordinate coord = new ChunkCoordinate(i, j); //replace after u figure out coords
+				  ChunkCoordinate coord = new ChunkCoordinate(j, i); //replace after u figure out coords
 				  
 				  if(game.getMap().getChunk(j, i) == null) { //generate a new chunk
-				  
-				  game.getMap().generateChunk(coord);
-				  drawChunk(g, game.getMap().getChunk(j, i));
+			
+					  game.getMap().generateChunk(coord);
+					  drawChunk(g, game.getMap().getChunk(j, i));
 				  
 				  }
 				  
