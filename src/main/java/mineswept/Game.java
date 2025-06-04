@@ -1,24 +1,10 @@
 package mineswept;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.PrintStream;
-
-import org.lwjgl.*;
-import org.lwjgl.glfw.*;
-import org.lwjgl.opengl.*;
-import org.lwjgl.system.*;
-
-import java.nio.*;
-
-import static org.lwjgl.glfw.Callbacks.*;
-import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.system.MemoryStack.*;
-import static org.lwjgl.system.MemoryUtil.*;
-
-import java.io.File; // Import the File class
-import java.io.FileNotFoundException; // Import this class to handle errors
-import java.util.Scanner; // Import the Scanner class to read text files
-import java.util.HashMap; // import the HashMap class
+import java.util.HashMap;
+import java.util.Scanner;
 
 public class Game {
 
@@ -54,6 +40,16 @@ public class Game {
 	public static void main(String[] args) {
 
 		Map map = new Map(32, 16, 16);
+		map.generateChunk(new ChunkCoordinate(1, 0));
+		map.generateChunk(new ChunkCoordinate(0, 1));
+		map.generateChunk(new ChunkCoordinate(-1, 0));
+		map.generateChunk(new ChunkCoordinate(0, -1));
+
+
+
+
+		// map.updateChunkBorder(new ChunkCoordinate(0, 0));
+		// map.updateChunkBorder(new ChunkCoordinate(1, 0));
 		Game game = new Game(map);
 
 		// try {
@@ -97,8 +93,10 @@ public class Game {
 		int height = s.nextInt();
 		s.nextLine();
 
-		HashMap<ChunkCoordinate, Chunk> chunks = new HashMap<ChunkCoordinate, Chunk>();
+		HashMap<ChunkCoordinate, Chunk> chunks = new HashMap<>();
 		
+		Chunk chunk = null;
+
 		while (s.hasNextLine()) {
 
 			s.nextLine();
@@ -136,13 +134,13 @@ public class Game {
 					rowIndex++;
 				}
 
-				tileArr[rowIndex][colIndex] = new Tile(isRevealed, isFlagged, state);
+				tileArr[rowIndex][colIndex] = new Tile(isRevealed, isFlagged, state, chunk, rowIndex, colIndex);
 				colIndex++;
 			}
 			
 			ChunkCoordinate coordinate = new ChunkCoordinate(chunkX, chunkY);
 			// create chunk based on tileArr
-			Chunk chunk = new Chunk(tileArr, coordinate);
+			chunk = new Chunk(tileArr, coordinate);
 			chunk.setNumOfTilesSweeped(numOfTilesSweeped);
 			chunk.setNumOfEmptyTiles(numOfEmptyTiles);
 
