@@ -44,7 +44,7 @@ public class Map {
   
 	public ChunkCoordinate[] generateChunks(ChunkCoordinate coord) {
 		
-		ChunkCoordinate[] generated = new ChunkCoordinate[8];
+		ChunkCoordinate[] generated = new ChunkCoordinate[4];
 		
 		//check/add the north chunk 
 		if(!chunks.containsKey(new ChunkCoordinate(coord.getChunkX(), coord.getChunkY()-1))) {
