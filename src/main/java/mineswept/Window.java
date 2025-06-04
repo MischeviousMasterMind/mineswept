@@ -67,9 +67,13 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 		super.paintComponent(g);
 
 		drawMap(g, game.getMap());
+
 		// drawChunk(g, game.getMap().getChunk(0, 0));
 		// drawChunk(g, game.getMap().getChunk(1, 0));
+
 		getChunksOnScreen(g);
+		
+	
 		
 		
 		// drawChunk(g, game.getMap().getChunk(0, 0), (int)game.getxScreenCoordinate(), (int)game.getyScreenCoordinate());
@@ -144,6 +148,30 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 		g.setColor(Color.BLACK);
 
 	}
+	
+	public void getChunksOnScreen(Graphics g) {
+		
+		for(int i = (int) ((double) inityScreenCoordinate/(game.getMap().getHeight() * TILE_SIZE)); i < Math.ceil((inityScreenCoordinate+getSize().getHeight())/(game.getMap().getHeight() * TILE_SIZE)); i++) {
+			for(int j = (int) ((double)initxScreenCoordinate/(game.getMap().getWidth() * TILE_SIZE)); j < Math.ceil((initxScreenCoordinate+getSize().getWidth())/(game.getMap().getWidth() * TILE_SIZE)); j++) {
+				
+				  ChunkCoordinate coord = new ChunkCoordinate(j, i); //replace after u figure out coords
+				  
+				  if(game.getMap().getChunk(j, i) == null) { //generate a new chunk
+			
+					  game.getMap().generateChunk(coord);
+					  drawChunk(g, game.getMap().getChunk(j, i));
+				  
+				  }
+
+			}
+		
+		}
+		
+	}
+	
+	public void generateChunksOnScreen() {
+		
+	}
 
 	public void drawMap(Graphics g, Map map) {
 
@@ -216,6 +244,7 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 
 		return game.getMap().getChunk(coordinate).getTile(tileY, tileX);
 	}
+
 	
 	public void getChunksOnScreen(Graphics g) {
 		
@@ -246,6 +275,7 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 		
 		
 	}
+
 
 
 	public void drawTile(Graphics g, Tile tile, int x, int y) {
@@ -342,9 +372,9 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 		if (e.getButton() == MouseEvent.BUTTON1) { // left click
 			tile.sweep();
 			helperSweep(game.getMap(), tile);			
-		} else if (e.getButton() == MouseEvent.BUTTON2) { // right click
+		} else if (e.getButton() == MouseEvent.BUTTON3) { // right click
 			tile.flag();
-		} else if (e.getButton() == MouseEvent.BUTTON3) { // scroll wheel
+		} else if (e.getButton() == MouseEvent.BUTTON2) { // scroll wheel
 			// clear a bunch of space
 		}
 	}
@@ -385,6 +415,11 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 	@Override
 	public void mouseReleased(MouseEvent e) {
 
+		//if(mouseInitX+TILE_SIZE > currentMouseX) {
+			//currentMouseX = mouseInitX;
+			//game.set
+		//}
+		
 	}
 
 	@Override
