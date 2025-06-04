@@ -1,5 +1,6 @@
 package mineswept;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
@@ -33,7 +34,8 @@ public class Map {
 		this.height = length;
 
 	}
-	
+
+
 	public void generateChunk(ChunkCoordinate coord) {
 		
 		chunks.put(coord, new Chunk(width, height, numMines, coord));
@@ -137,6 +139,45 @@ public class Map {
 		
 		return generated; 
 		
+	}
+
+	public ArrayList<Chunk> getNeighboringChunks(ChunkCoordinate coord) {
+
+		ArrayList<Chunk> neighboringChunks = new ArrayList<>();
+
+		for (int i = -1; i <=  1; i++) {
+
+			for (int ii = -1; ii <= 1; ii++) {
+
+				int x = coord.getChunkX();
+				int y = coord.getChunkY();
+
+				if ((i == x && ii == y) || (x + i < 0) || (x + i >= width) || (y + ii < 0) || (y + ii >= height)) {
+
+					continue;
+
+				}
+
+				Chunk neighborChunk = chunks.get(new ChunkCoordinate(x + i, y + ii));
+
+				if (neighborChunk != null) {
+
+					neighboringChunks.add(neighborChunk);
+
+				}
+
+			}
+
+		}
+
+		return neighboringChunks;
+	}
+
+	// TODO: Fix this method
+	public void updateChunkBorder(ChunkCoordinate coord) {
+
+		
+
 	}
 	
 	public Chunk getChunk(int chunkX, int chunkY) {
