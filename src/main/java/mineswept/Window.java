@@ -84,11 +84,7 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 		g.drawString(String.format("Scale: %.2f", scale), (int)(getSize().getWidth() - 70), 20);
 		g.drawString(String.format("Draw Tile Size: %d", drawTileSize), (int)(getSize().getWidth() - 140), 40);
 
-		try {
-			debug(g);
-		} catch (ArithmeticException e) {
-
-		}
+		debug(g);
 	}
 
 	public void debug(Graphics g) {
@@ -418,8 +414,8 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 		currentMouseX = e.getX();
 		currentMouseY = e.getY();
 
-		xMapPositionOfMouse = e.getX() + game.getxScreenCoordinate();
-		yMapPositionOfMouse = e.getY() + game.getyScreenCoordinate();
+		xMapPositionOfMouse = currentMouseX + game.getxScreenCoordinate();
+		yMapPositionOfMouse = currentMouseY + game.getyScreenCoordinate();
 
 	}
 
