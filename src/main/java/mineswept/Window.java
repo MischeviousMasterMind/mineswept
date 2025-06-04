@@ -9,6 +9,8 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.awt.geom.AffineTransform;
 
 import javax.swing.JFrame;
@@ -16,9 +18,12 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 import javax.swing.event.MouseInputListener;
 
-public class Window extends JPanel implements ActionListener, MouseInputListener {
+public class Window extends JPanel implements ActionListener, MouseInputListener, MouseWheelListener {
 
 	public final static int TILE_SIZE = 100;
+	public int drawTileSize = TILE_SIZE;
+	public double scrollSensitivity = 1.0;
+	public double scale = 1.0;
 
 	private Game game;
 
@@ -75,6 +80,10 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 
 	public void debug(Graphics g) {
 
+		g.setColor(Color.BLACK);
+
+		g.drawString(String.format("Scale: %.2f", scale), (int)(getSize().getWidth() - 70), 20);
+
 		g.setColor(Color.RED);
 		g.drawString(String.format("Map Coordinate of Screen: (%d, %d)", game.getxScreenCoordinate(),
 				game.getyScreenCoordinate()), 10, 20);
@@ -87,8 +96,8 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 
 		g.setColor(Color.BLUE);
 
-		g.drawRect(currentChunkCoordinate.getChunkX() * game.getMap().getWidth() * TILE_SIZE - game.getxScreenCoordinate(), 
-			currentChunkCoordinate.getChunkY() * game.getMap().getHeight() * TILE_SIZE - game.getyScreenCoordinate(), game.getMap().getWidth() * TILE_SIZE, game.getMap().getHeight() * TILE_SIZE);
+		g.drawRect(currentChunkCoordinate.getChunkX() * game.getMap().getWidth() * drawTileSize - game.getxScreenCoordinate(), 
+			currentChunkCoordinate.getChunkY() * game.getMap().getHeight() * drawTileSize - game.getyScreenCoordinate(), game.getMap().getWidth() * drawTileSize, game.getMap().getHeight() * drawTileSize);
 	
 		g.setColor(Color.RED);
 
@@ -97,8 +106,8 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 
 		// find position of each chunk on the screen (chunk location in map * length of
 		// chunk)
-		int chunkX0 = (int) currentChunkCoordinate.getChunkX() * game.getMap().getWidth() * TILE_SIZE;
-		int chunkY0 = (int) currentChunkCoordinate.getChunkY() * game.getMap().getHeight() * TILE_SIZE;
+		int chunkX0 = (int) currentChunkCoordinate.getChunkX() * game.getMap().getWidth() * drawTileSize;
+		int chunkY0 = (int) currentChunkCoordinate.getChunkY() * game.getMap().getHeight() * drawTileSize;
 
 		// find the position of the mouse in each chunk (screen coordinate - chunk
 		// coordinate)
@@ -106,15 +115,15 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 		int deltaY = yMapPositionOfMouse - chunkY0;
 
 		// find the tile position within the chunk
-		int tileX = deltaX / TILE_SIZE;
-		int tileY = deltaY / TILE_SIZE;
+		int tileX = deltaX / drawTileSize;
+		int tileY = deltaY / drawTileSize;
 
 		g.drawString(String.format("Selected Tile Coordinate: (%d, %d)", tileX, tileY), 10, 100);
 		g.drawString(String.format("Selected Chunk X0/Y0 Coordinate: (%d, %d)", chunkX0, chunkY0), 10, 180);
 		g.drawString(String.format("Selected Delta X/Y Coordinate: (%d, %d)", deltaX, deltaY), 10, 200);
 
-		g.drawRect((currentChunkCoordinate.getChunkX() * game.getMap().getWidth() + tileX) * TILE_SIZE - game.getxScreenCoordinate(), 
-			(currentChunkCoordinate.getChunkY() * game.getMap().getHeight() + tileY) * TILE_SIZE - game.getyScreenCoordinate(), TILE_SIZE, TILE_SIZE);
+		g.drawRect((currentChunkCoordinate.getChunkX() * game.getMap().getWidth() + tileX) * drawTileSize - game.getxScreenCoordinate(), 
+			(currentChunkCoordinate.getChunkY() * game.getMap().getHeight() + tileY) * drawTileSize - game.getyScreenCoordinate(), drawTileSize, drawTileSize);
 
 		g.setColor(Color.GRAY);
 
@@ -149,8 +158,8 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 
 		Chunk chunk = game.getMap().getChunk(coord);
 
-		int x = coord.getChunkX() * game.getMap().getWidth() * TILE_SIZE;
-		int y = coord.getChunkY() * game.getMap().getHeight() * TILE_SIZE;
+		int x = coord.getChunkX() * game.getMap().getWidth() * drawTileSize;
+		int y = coord.getChunkY() * game.getMap().getHeight() * drawTileSize;
 
 		if (chunk == null) {
 
@@ -181,8 +190,8 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 	}
 
 	public ChunkCoordinate getChunkCoordinate() {
-		int x = (int) Math.floor((double) xMapPositionOfMouse / (game.getMap().getWidth() * TILE_SIZE));
-		int y = (int) Math.floor((double) yMapPositionOfMouse / (game.getMap().getHeight() * TILE_SIZE));
+		int x = (int) Math.floor((double) xMapPositionOfMouse / (game.getMap().getWidth() * drawTileSize));
+		int y = (int) Math.floor((double) yMapPositionOfMouse / (game.getMap().getHeight() * drawTileSize));
 		ChunkCoordinate c = new ChunkCoordinate(x, y);
 		return c;
 	}
@@ -191,8 +200,8 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 
 		// find position of each chunk on the screen (chunk location in map * length of
 		// chunk)
-		int chunkX0 = coordinate.getChunkX() * game.getMap().getWidth() * TILE_SIZE;
-		int chunkY0 = coordinate.getChunkY() * game.getMap().getHeight() * TILE_SIZE;
+		int chunkX0 = coordinate.getChunkX() * game.getMap().getWidth() * drawTileSize;
+		int chunkY0 = coordinate.getChunkY() * game.getMap().getHeight() * drawTileSize;
 
 		// find the position of the mouse in each chunk (screen coordinate - chunk
 		// coordinate)
@@ -202,24 +211,24 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 //		int deltaY = Math.abs(yMapPositionOfMouse - chunkY0);
 
 		// find the tile position within the chunk
-		int tileX = deltaX / TILE_SIZE;
-		int tileY = deltaY / TILE_SIZE;
+		int tileX = deltaX / drawTileSize;
+		int tileY = deltaY / drawTileSize;
 
 		return game.getMap().getChunk(coordinate).getTile(tileY, tileX);
 	}
 	
 	public void getChunksOnScreen(Graphics g) {
 		
-		//for(int i = game.getyScreenCoordinate(); i < Math.ceil(game.getyScreenCoordinate()*game.getMap().getHeight()*TILE_SIZE); i+=game.getMap().getHeight()*TILE_SIZE) {
-			//for(int j = game.getxScreenCoordinate(); j < Math.ceil(game.getxScreenCoordinate()*game.getMap().getWidth()*TILE_SIZE); j+=game.getMap().getWidth()) {
+		//for(int i = game.getyScreenCoordinate(); i < Math.ceil(game.getyScreenCoordinate()*game.getMap().getHeight()*drawTileSize); i+=game.getMap().getHeight()*drawTileSize) {
+			//for(int j = game.getxScreenCoordinate(); j < Math.ceil(game.getxScreenCoordinate()*game.getMap().getWidth()*drawTileSize); j+=game.getMap().getWidth()) {
 				
 
 		ChunkCoordinate coord = new ChunkCoordinate(2, 2);
 		game.getMap().generateChunk(coord);
 				
 				/*
-				 * ChunkCoordinate coord = new ChunkCoordinate(j/game.getMap().getWidth()*TILE_SIZE,
-				 * i/game.getMap().getHeight()*TILE_SIZE);
+				 * ChunkCoordinate coord = new ChunkCoordinate(j/game.getMap().getWidth()*drawTileSize,
+				 * i/game.getMap().getHeight()*drawTileSize);
 				 * 
 				 * if(game.getMap().getChunk(coord.getChunkX(), coord.getChunkY()) == null) {
 				 * //generate a new chunk
@@ -241,21 +250,23 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 
 	public void drawTile(Graphics g, Tile tile, int x, int y) {
 		
-		AffineTransform tilePosition = AffineTransform.getTranslateInstance(x - game.getxScreenCoordinate(),
+		AffineTransform tileTransform = AffineTransform.getTranslateInstance(x - game.getxScreenCoordinate(),
 				y - game.getyScreenCoordinate());
+
+		tileTransform.scale(scale, scale);
 
 		if (tile == null) {
 
-			((Graphics2D) g).drawImage(hidden, tilePosition, null);
+			((Graphics2D) g).drawImage(hidden, tileTransform, null);
 			return;
 
 		}
 
 		if (!tile.isRevealed()) {
-			((Graphics2D) g).drawImage(hidden, tilePosition, null);
+			((Graphics2D) g).drawImage(hidden, tileTransform, null);
 			
 			if (tile.isFlagged()) {
-				((Graphics2D) g).drawImage(flag, tilePosition, null);
+				((Graphics2D) g).drawImage(flag, tileTransform, null);
 			}
 			return;
 		}
@@ -264,43 +275,43 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 		switch (tile.getState()) {
 
 			default:
-				((Graphics2D) g).drawImage(tile0, tilePosition, null);
+				((Graphics2D) g).drawImage(tile0, tileTransform, null);
 				break;
 
 			case 1:
-				((Graphics2D) g).drawImage(tile1, tilePosition, null);
+				((Graphics2D) g).drawImage(tile1, tileTransform, null);
 				break;
 
 			case 2:
-				((Graphics2D) g).drawImage(tile2, tilePosition, null);
+				((Graphics2D) g).drawImage(tile2, tileTransform, null);
 				break;
 
 			case 3:
-				((Graphics2D) g).drawImage(tile3, tilePosition, null);
+				((Graphics2D) g).drawImage(tile3, tileTransform, null);
 				break;
 
 			case 4:
-				((Graphics2D) g).drawImage(tile4, tilePosition, null);
+				((Graphics2D) g).drawImage(tile4, tileTransform, null);
 				break;
 
 			case 5:
-				((Graphics2D) g).drawImage(tile5, tilePosition, null);
+				((Graphics2D) g).drawImage(tile5, tileTransform, null);
 				break;
 
 			case 6:
-				((Graphics2D) g).drawImage(tile6, tilePosition, null);
+				((Graphics2D) g).drawImage(tile6, tileTransform, null);
 				break;
 
 			case 7:
-				((Graphics2D) g).drawImage(tile7, tilePosition, null);
+				((Graphics2D) g).drawImage(tile7, tileTransform, null);
 				break;
 
 			case 8:
-				((Graphics2D) g).drawImage(tile8, tilePosition, null);
+				((Graphics2D) g).drawImage(tile8, tileTransform, null);
 				break;
 			
 			case 9:
-				((Graphics2D) g).drawImage(mine, tilePosition, null);
+				((Graphics2D) g).drawImage(mine, tileTransform, null);
 				break;
 		}
 	}
@@ -409,8 +420,20 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 	}
 
 	@Override
+	public void mouseWheelMoved(MouseWheelEvent e) {
+		
+		System.out.println("Mouse Scrolled!");
+
+		scale = 1.0 + e.getPreciseWheelRotation();
+		drawTileSize = (int)(TILE_SIZE * scale * scrollSensitivity);
+
+	}
+
+	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
 		repaint();
 	}
+
+	
 }
