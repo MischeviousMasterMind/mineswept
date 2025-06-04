@@ -67,6 +67,7 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 		// drawChunk(g, game.getMap().getChunk(1, 0));
 
 		getChunksOnScreen(g);
+		generateChunksOnScreen();
 		
 	
 		
@@ -147,10 +148,9 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 				
 				  ChunkCoordinate coord = new ChunkCoordinate(j, i); //replace after u figure out coords
 				  
-				  if(game.getMap().getChunk(j, i) == null) { //generate a new chunk
+				  if(game.getMap().getChunk(j, i) == null) { //draw an empty chunk if null 
 			
-					  game.getMap().generateChunk(coord);
-					  drawChunk(g, game.getMap().getChunk(j, i));
+					  drawChunk(g, coord);
 				  
 				  }
 
@@ -161,6 +161,14 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 	}
 	
 	public void generateChunksOnScreen() {
+		
+		for(Chunk chunk : game.getMap().getAllChunks()) {
+			
+			//if current chunk has a tile revealed, generate chunks around it
+			if(chunk.getNumOfTilesSweeped() != 0) {
+				game.getMap().generateChunks(chunk.getCoordinate());
+			}
+		}
 		
 	}
 
@@ -371,11 +379,6 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-
-		//if(mouseInitX+TILE_SIZE > currentMouseX) {
-			//currentMouseX = mouseInitX;
-			//game.set
-		//}
 		
 	}
 

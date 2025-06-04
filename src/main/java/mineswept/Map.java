@@ -118,24 +118,6 @@ public class Map {
 					
 		} 
 		
-		//northeast chunk 
-//		if(!chunks.containsKey(new ChunkCoordinate(coord.getChunkX()-1, coord.getChunkY()+1))) {
-//			
-//			//add to the list 
-//			generated[4] = new ChunkCoordinate(coord.getChunkX()-1, coord.getChunkY()+1);
-//					
-//			//create the new chunk
-//			generateChunk(generated[4]);
-//					
-//			//store the new chunk into the hashmap 
-//			chunks.put(generated[4], getChunk(generated[4]));
-//					
-//			//set the adjacent chunk 
-//			chunks.get(coord).setAdjacentChunk(getChunk(generated[4]), CardinalDirection.WEST); 
-//			getChunk(generated[4]).setAdjacentChunk(chunks.get(coord), CardinalDirection.EAST);
-//			getChunk(generated[4]).setAdjacentChunk(chunks.get(coord), CardinalDirection.EAST);
-//					
-//		} 
 		
 		return generated; 
 		
