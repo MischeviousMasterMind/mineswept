@@ -306,9 +306,9 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 		if (e.getButton() == MouseEvent.BUTTON1) { // left click
 			tile.sweep();
 			helperSweep(game.getMap(), tile);			
-		} else if (e.getButton() == MouseEvent.BUTTON2) { // right click
+		} else if (e.getButton() == MouseEvent.BUTTON3) { // right click
 			tile.flag();
-		} else if (e.getButton() == MouseEvent.BUTTON3) { // scroll wheel
+		} else if (e.getButton() == MouseEvent.BUTTON2) { // scroll wheel
 			// clear a bunch of space
 		}
 	}
