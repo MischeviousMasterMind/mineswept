@@ -61,8 +61,8 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 
 		super.paintComponent(g);
 
-		//drawMap(g, game.getMap());
-		drawChunk(g, game.getMap().getChunk(0, 0));
+		drawMap(g, game.getMap());
+		// drawChunk(g, game.getMap().getChunk(0, 0));
 		// drawChunk(g, game.getMap().getChunk(1, 0));
 		getChunksOnScreen(g);
 		
@@ -136,23 +136,41 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 
 	}
 
-	public void drawMap(Graphics g, Map map, int x, int y) {
+	public void drawMap(Graphics g, Map map) {
 
 		for (Chunk chunk : map.getAllChunks()) {
 			// System.out.println(chunk); // for testing purposes
-			drawChunk(g, chunk);
+			drawChunk(g, chunk.getCoordinate());
 		}
 
 	}
 
-	public void drawChunk(Graphics g, Chunk chunk) {
+	public void drawChunk(Graphics g, ChunkCoordinate coord) {
 
-		int x = chunk.getCoordinate().getChunkX() * chunk.getWidth() * TILE_SIZE;
-		int y = chunk.getCoordinate().getChunkY() * chunk.getHeight() * TILE_SIZE;
+		Chunk chunk = game.getMap().getChunk(coord);
 
-		for (int row = 0; row < chunk.getWidth(); row++) {
+		int x = coord.getChunkX() * game.getMap().getWidth() * TILE_SIZE;
+		int y = coord.getChunkY() * game.getMap().getHeight() * TILE_SIZE;
 
-			for (int col = 0; col < chunk.getHeight(); col++) {
+		if (chunk == null) {
+
+			for (int row = 0; row < game.getMap().getWidth(); row++) {
+
+				for (int col = 0; col < game.getMap().getHeight(); col++) {
+
+					drawTile(g, null, x + col * 100, y + row * 100);
+
+				}
+
+			}
+
+			return;
+		}
+
+
+		for (int row = 0; row < game.getMap().getWidth(); row++) {
+
+			for (int col = 0; col < game.getMap().getHeight(); col++) {
 
 				drawTile(g, chunk.getTile(row, col), x + col * 100, y + row * 100);
 
@@ -222,9 +240,16 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 
 
 	public void drawTile(Graphics g, Tile tile, int x, int y) {
-
+		
 		AffineTransform tilePosition = AffineTransform.getTranslateInstance(x - game.getxScreenCoordinate(),
 				y - game.getyScreenCoordinate());
+
+		if (tile == null) {
+
+			((Graphics2D) g).drawImage(hidden, tilePosition, null);
+			return;
+
+		}
 
 		if (!tile.isRevealed()) {
 			((Graphics2D) g).drawImage(hidden, tilePosition, null);

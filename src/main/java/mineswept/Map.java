@@ -154,53 +154,10 @@ public class Map {
 		return neighboringChunks;
 	}
 
+	// TODO: Fix this method
 	public void updateChunkBorder(ChunkCoordinate coord) {
 
-		Chunk currentChunk = getChunk(coord);
-
-		for (Chunk neighborChunk : getNeighboringChunks(coord)) {
-
-			int deltaX = (coord.getChunkX() - neighborChunk.getCoordinate().getChunkX()) * width;
-			int deltaY = (coord.getChunkY() - neighborChunk.getCoordinate().getChunkY()) * height;
-
-			for (int i = 0; i < height; i++) {
-
-				for (Tile tile : currentChunk.getNeighboringTiles(deltaY, i)) {
-
-					if (neighborChunk.getTile(0, i).getState() == 9) {
-						tile.incrementState();
-					}
-				}
-
-				for (Tile tile : currentChunk.getNeighboringTiles(deltaY + height - 1, i)) {
-
-					if (neighborChunk.getTile(height - 1, i).getState() == 9) {
-						tile.incrementState();
-					}
-
-				}
-
-			}
-
-			for (int i = 1; i < width - 1; i++) {
-
-				for (Tile tile : currentChunk.getNeighboringTiles(i, deltaX)) {
-
-					if (neighborChunk.getTile(i, 0).getState() == 9) {
-						tile.incrementState();
-					}	
-				}
-
-				for (Tile tile : currentChunk.getNeighboringTiles(i, deltaX + width - 1)) {
-
-					if (neighborChunk.getTile(i, width - 1).getState() == 9) {
-						tile.incrementState();
-					}
-
-				}
-
-			}
-		}
+		
 
 	}
 	
