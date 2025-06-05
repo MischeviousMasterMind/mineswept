@@ -35,7 +35,6 @@ public class Map {
 
 	}
 
-
 	public Chunk generateChunk(ChunkCoordinate coord) {
 
 		Chunk newChunk = new Chunk(width, height, numMines, coord);
@@ -47,10 +46,10 @@ public class Map {
   
 	public ChunkCoordinate[] generateChunks(ChunkCoordinate coord) {
 		
-		ChunkCoordinate[] generated = new ChunkCoordinate[8];
+		ChunkCoordinate[] generated = new ChunkCoordinate[4];
 		
 		//check/add the north chunk 
-		if(!chunks.containsKey(new ChunkCoordinate(coord.getChunkX(), coord.getChunkY()-1))) {
+		if(!chunks.containsKey(new ChunkCoordinate(coord.getChunkX(), coord.getChunkY()-1)) && coord.getChunkY() != 0) {
 			 
 			//add to the list 
 			generated[0] = new ChunkCoordinate(coord.getChunkX(), coord.getChunkY()-1);
@@ -120,25 +119,6 @@ public class Map {
 			getChunk(generated[3]).setAdjacentChunk(chunks.get(coord), CardinalDirection.EAST);
 					
 		} 
-		
-		//northeast chunk 
-//		if(!chunks.containsKey(new ChunkCoordinate(coord.getChunkX()-1, coord.getChunkY()+1))) {
-//			
-//			//add to the list 
-//			generated[4] = new ChunkCoordinate(coord.getChunkX()-1, coord.getChunkY()+1);
-//					
-//			//create the new chunk
-//			generateChunk(generated[4]);
-//					
-//			//store the new chunk into the hashmap 
-//			chunks.put(generated[4], getChunk(generated[4]));
-//					
-//			//set the adjacent chunk 
-//			chunks.get(coord).setAdjacentChunk(getChunk(generated[4]), CardinalDirection.WEST); 
-//			getChunk(generated[4]).setAdjacentChunk(chunks.get(coord), CardinalDirection.EAST);
-//			getChunk(generated[4]).setAdjacentChunk(chunks.get(coord), CardinalDirection.EAST);
-//					
-//		} 
 		
 		return generated; 
 		

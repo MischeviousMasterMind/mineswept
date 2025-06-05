@@ -69,10 +69,12 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 
 		drawMap(g, game.getMap());
 
-		// drawChunk(g, game.getMap().getChunk(0, 0));
+		//drawChunk(g, game.getMap().getChunk(0, 0).getCoordinate());
 		// drawChunk(g, game.getMap().getChunk(1, 0));
 
 		getChunksOnScreen(g);
+		generateChunksOnScreen(g);
+		
 		
 	
 		
@@ -154,15 +156,18 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 	
 	public void getChunksOnScreen(Graphics g) {
 		
-		for(int i = (int) ((double) inityScreenCoordinate/(game.getMap().getHeight() * drawTileSize)); i < Math.ceil((inityScreenCoordinate+getSize().getHeight())/(game.getMap().getHeight() * drawTileSize)); i++) {
-			for(int j = (int) ((double)initxScreenCoordinate/(game.getMap().getWidth() * drawTileSize)); j < Math.ceil((initxScreenCoordinate+getSize().getWidth())/(game.getMap().getWidth() * drawTileSize)); j++) {
+
+		for(int i = (int) ((double) inityScreenCoordinate/(game.getMap().getHeight() * TILE_SIZE)); 
+				i < Math.ceil((inityScreenCoordinate+getSize().getHeight())/(game.getMap().getHeight() * TILE_SIZE)); i++) {
+			for(int j = (int) ((double)initxScreenCoordinate/(game.getMap().getWidth() * TILE_SIZE)); 
+					j < Math.ceil((initxScreenCoordinate+getSize().getWidth())/(game.getMap().getWidth() * TILE_SIZE)); j++) {
 				
 				  ChunkCoordinate coord = new ChunkCoordinate(j, i); //replace after u figure out coords
 				  
-				  if(game.getMap().getChunk(j, i) == null) { //generate a new chunk
-			
-					  game.getMap().generateChunk(coord);
-					  drawChunk(g, game.getMap().getChunk(j, i).getCoordinate());
+				  if(game.getMap().getChunk(j, i) == null) { //draw an empty chunk if null 
+
+					  drawChunk(g, coord);
+
 				  
 				  }
 
@@ -172,14 +177,24 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 		
 	}
 	
-	public void generateChunksOnScreen() {
+	public void generateChunksOnScreen(Graphics g) {
+		
+		for(Chunk chunk : game.getMap().getAllChunks()) {
+			
+			//if current chunk has a tile revealed, generate chunks around it
+			if(chunk.getNumOfTilesSweeped() > 0) {
+				game.getMap().generateChunks(chunk.getCoordinate());
+				
+				
+			}
+		}
 		
 	}
 
 	public void drawMap(Graphics g, Map map) {
 
 		for (Chunk chunk : map.getAllChunks()) {
-			// System.out.println(chunk); // for testing purposes
+			
 			drawChunk(g, chunk.getCoordinate());
 		}
 
@@ -352,6 +367,9 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 	public void helperSweep(Map map, Tile tile) {
 		if (!tile.isRevealed()) {
 	        tile.sweep();
+	        
+	        //increment the num of tiles sweeped for the chunk ? delete this if it is bad
+	        tile.getChunk().setNumOfTilesSweeped(tile.getChunk().getNumOfTilesSweeped()+1);
 	    }
 
 	    if (tile.getState() == 0) {
@@ -384,11 +402,6 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-
-		//if(mouseInitX+TILE_SIZE > currentMouseX) {
-			//currentMouseX = mouseInitX;
-			//game.set
-		//}
 		
 	}
 
