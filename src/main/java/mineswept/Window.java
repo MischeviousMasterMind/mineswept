@@ -250,8 +250,8 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 
 	public void drawTile(Graphics g, Tile tile, int x, int y) {
 		
-		AffineTransform tileTransform = AffineTransform.getTranslateInstance(x - game.getxScreenCoordinate(),
-				y - game.getyScreenCoordinate());
+		AffineTransform tileTransform = AffineTransform.getTranslateInstance(x - (int)(game.getxScreenCoordinate() * scale),
+				y - (int)(game.getyScreenCoordinate() * scale));
 
 		tileTransform.scale(scale, scale);
 
@@ -355,11 +355,21 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 	    }
 
 	    if (tile.getState() == 0) {
-	        for (Tile neighboringTile : tile.getChunk().getNeighboringTiles(tile.getX(), tile.getY())) {
-	            if (!neighboringTile.isRevealed()) {
-	                helperSweep(map, neighboringTile);
-	            }
-	        }
+	        // for (Tile neighboringTile : tile.getChunk().getNeighboringTiles(tile.getX(), tile.getY())) {
+	        //     if (!neighboringTile.isRevealed()) {
+	        //         helperSweep(map, neighboringTile);
+	        //     }
+	        // }
+
+			for (Tile neighboringTile : map.getAllNeighboringTiles(tile.getChunk().getCoordinate(), tile.getX(), tile.getY())) {
+
+				if (!neighboringTile.isRevealed()) {
+
+					helperSweep(map, neighboringTile);
+
+				}
+
+			}
 	    }
 	}
 
