@@ -157,10 +157,10 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 	public void getChunksOnScreen(Graphics g) {
 		
 
-		for(int i = (int) ((double) inityScreenCoordinate/(game.getMap().getHeight() * TILE_SIZE)); 
-				i < Math.ceil((inityScreenCoordinate+getSize().getHeight())/(game.getMap().getHeight() * TILE_SIZE)); i++) {
-			for(int j = (int) ((double)initxScreenCoordinate/(game.getMap().getWidth() * TILE_SIZE)); 
-					j < Math.ceil((initxScreenCoordinate+getSize().getWidth())/(game.getMap().getWidth() * TILE_SIZE)); j++) {
+		for(int i = (int) ((double) inityScreenCoordinate/(game.getMap().getHeight() * TILE_SIZE))/2; 
+				i < Math.ceil((inityScreenCoordinate+getSize().getHeight())/(game.getMap().getHeight() * TILE_SIZE)*2); i++) {
+			for(int j = (int) ((double)initxScreenCoordinate/(game.getMap().getWidth() * TILE_SIZE))/2; 
+					j < Math.ceil((initxScreenCoordinate+getSize().getWidth())/(game.getMap().getWidth() * TILE_SIZE)*2); j++) {
 				
 				  ChunkCoordinate coord = new ChunkCoordinate(j, i); //replace after u figure out coords
 				  
@@ -183,7 +183,7 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 			
 			//if current chunk has a tile revealed, generate chunks around it
 			if(chunk.getNumOfTilesSweeped() > 0) {
-				game.getMap().generateChunks(chunk.getCoordinate());
+				game.getMap().getNeighboringChunks(chunk.getCoordinate());
 				
 				
 			}
