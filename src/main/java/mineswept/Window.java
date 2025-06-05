@@ -348,15 +348,22 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 		flag = Toolkit.getDefaultToolkit().getImage("resources/flag2.png");
 	}
 
+	int numClicks = 0;
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		ChunkCoordinate coordinate = getChunkCoordinate();
 		Chunk chunk = game.getMap().getChunk(coordinate);
 		Tile tile = getTile(coordinate);
-
-		if (e.getButton() == MouseEvent.BUTTON1) { // left click
+		if (e.getButton() == MouseEvent.BUTTON1) { // left click	
+			while (numClicks == 0 && tile.getState() != 0) {
+				chunk = game.getMap().generateChunk(new ChunkCoordinate(coordinate.getChunkX(), coordinate.getChunkY()));
+				tile = getTile(coordinate);
+				game.getMap().getHashMap().put(coordinate, chunk);				
+			}
+			
 			tile.sweep();
-			helperSweep(game.getMap(), tile);			
+			helperSweep(game.getMap(), tile);	
+			numClicks++;
 		} else if (e.getButton() == MouseEvent.BUTTON3) { // right click
 			tile.flag();
 		} else if (e.getButton() == MouseEvent.BUTTON2) { // scroll wheel
