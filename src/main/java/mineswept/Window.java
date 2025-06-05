@@ -20,10 +20,10 @@ import javax.swing.event.MouseInputListener;
 
 public class Window extends JPanel implements ActionListener, MouseInputListener, MouseWheelListener {
 
-	public final static int TILE_SIZE = 100;
+	public final static int TILE_SIZE = 50;
 	public int drawTileSize = TILE_SIZE;
 	public double scrollSensitivity = 0.5;
-	public double scale = 1.0;
+	public double scale = 0.5;
 
 	private Game game;
 
@@ -86,11 +86,7 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 		g.drawString(String.format("Scale: %.2f", scale), (int)(getSize().getWidth() - 70), 20);
 		g.drawString(String.format("Draw Tile Size: %d", drawTileSize), (int)(getSize().getWidth() - 140), 40);
 
-		try {
-			debug(g);
-		} catch (ArithmeticException e) {
-
-		}
+		debug(g);
 	}
 
 	public void debug(Graphics g) {
@@ -377,7 +373,7 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 	    }
 
 	    if (tile.getState() == 0) {
-	        for (Tile neighboringTile : tile.getChunk().getNeighboringTiles(tile.getX(), tile.getY())) {
+	        for (Tile neighboringTile : map.getAllNeighboringTiles(tile.getChunk().getCoordinate(), tile.getX(), tile.getY())) {
 	            if (!neighboringTile.isRevealed()) {
 	                helperSweep(map, neighboringTile);
 	            }
@@ -431,8 +427,8 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 		currentMouseX = e.getX();
 		currentMouseY = e.getY();
 
-		xMapPositionOfMouse = e.getX() + game.getxScreenCoordinate();
-		yMapPositionOfMouse = e.getY() + game.getyScreenCoordinate();
+		xMapPositionOfMouse = currentMouseX + game.getxScreenCoordinate();
+		yMapPositionOfMouse = currentMouseY + game.getyScreenCoordinate();
 
 	}
 
@@ -443,19 +439,7 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent e) {
-
-		System.out.println("Mouse Scrolled!");
-
-		scale = 1.0 + e.getPreciseWheelRotation() * scrollSensitivity;
-		drawTileSize = (int)(TILE_SIZE * scale);
-
-		if (scale < 0.5) {
-			scale = 0.5;
-		}
-
-		if (scale > 2.0) {
-			scale = 2.0;
-		}
+		
 	}
 
 	@Override
