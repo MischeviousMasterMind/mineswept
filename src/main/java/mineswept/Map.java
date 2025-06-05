@@ -35,19 +35,21 @@ public class Map {
 
 	}
 
+	public Chunk generateChunk(ChunkCoordinate coord) {
 
-	public void generateChunk(ChunkCoordinate coord) {
-		
-		chunks.put(coord, new Chunk(width, height, numMines, coord));
+		Chunk newChunk = new Chunk(width, height, numMines, coord);
 
+		chunks.put(coord, newChunk);
+
+		return newChunk;
 	}
   
 	public ChunkCoordinate[] generateChunks(ChunkCoordinate coord) {
 		
-		ChunkCoordinate[] generated = new ChunkCoordinate[8];
+		ChunkCoordinate[] generated = new ChunkCoordinate[4];
 		
 		//check/add the north chunk 
-		if(!chunks.containsKey(new ChunkCoordinate(coord.getChunkX(), coord.getChunkY()-1))) {
+		if(!chunks.containsKey(new ChunkCoordinate(coord.getChunkX(), coord.getChunkY()-1)) && coord.getChunkY() != 0) {
 			 
 			//add to the list 
 			generated[0] = new ChunkCoordinate(coord.getChunkX(), coord.getChunkY()-1);
@@ -118,25 +120,6 @@ public class Map {
 					
 		} 
 		
-		//northeast chunk 
-//		if(!chunks.containsKey(new ChunkCoordinate(coord.getChunkX()-1, coord.getChunkY()+1))) {
-//			
-//			//add to the list 
-//			generated[4] = new ChunkCoordinate(coord.getChunkX()-1, coord.getChunkY()+1);
-//					
-//			//create the new chunk
-//			generateChunk(generated[4]);
-//					
-//			//store the new chunk into the hashmap 
-//			chunks.put(generated[4], getChunk(generated[4]));
-//					
-//			//set the adjacent chunk 
-//			chunks.get(coord).setAdjacentChunk(getChunk(generated[4]), CardinalDirection.WEST); 
-//			getChunk(generated[4]).setAdjacentChunk(chunks.get(coord), CardinalDirection.EAST);
-//			getChunk(generated[4]).setAdjacentChunk(chunks.get(coord), CardinalDirection.EAST);
-//					
-//		} 
-		
 		return generated; 
 		
 	}
@@ -158,11 +141,17 @@ public class Map {
 
 				}
 
-				Chunk neighborChunk = chunks.get(new ChunkCoordinate(x + i, y + ii));
+				ChunkCoordinate newCoord = new ChunkCoordinate(x + i, y + ii);
+
+				Chunk neighborChunk = chunks.get(newCoord);
 
 				if (neighborChunk != null) {
 
 					neighboringChunks.add(neighborChunk);
+
+				} else {
+
+					neighboringChunks.add(generateChunk(newCoord));
 
 				}
 
@@ -176,10 +165,153 @@ public class Map {
 	// TODO: Fix this method
 	public void updateChunkBorder(ChunkCoordinate coord) {
 
-		
+		Chunk currentChunk = getChunk(coord);
+
+		for (Chunk neighborChunk : getNeighboringChunks(coord)) {
+
+			int initX, finalX;
+			int initY, finalY;
+
+			int relativeChunkX = neighborChunk.getCoordinate().getChunkX() - coord.getChunkX();
+			int relativeChunkY = neighborChunk.getCoordinate().getChunkY() - coord.getChunkY();
+
+			if (relativeChunkX < 0) {
+
+				initX = 0;
+				finalX = 0;
+
+			} else if (relativeChunkX == 0) {
+
+				initX = 0;
+				finalX = currentChunk.getWidth() - 1;
+
+			} else {
+
+				initX = currentChunk.getWidth() - 1;
+				finalX = currentChunk.getWidth() - 1;
+
+			}
+
+			if (relativeChunkY < 0) {
+
+				initY = 0;
+				finalY = 0;
+
+			} else if (relativeChunkY == 0) {
+
+				initY = 0;
+				finalY = currentChunk.getHeight() - 1;
+
+			} else {
+
+				initY = currentChunk.getWidth() - 1;
+				finalY = currentChunk.getWidth() - 1;
+
+			}
+
+			for (int i = initX; i <= finalX; i++) {
+
+				for (int ii = initY; ii <= finalY; ii++) {
+
+					Tile currentTile = currentChunk.getTile(ii, i);
+
+					if (currentTile.getState() == 9) {
+						continue;
+					}
+
+					currentTile.setState(0);
+
+					for (Tile neighborTile : currentChunk.getNeighboringTiles(i, ii)) {
+
+						if (neighborTile.getState() == 9) {
+							currentTile.incrementState();
+						}
+
+					}
+
+					for (Tile neighborTile : neighborChunk.getNeighboringTiles(i - relativeChunkX * width, ii - relativeChunkY * height)) {
+
+						if (neighborTile.getState() == 9) {
+							currentTile.incrementState();
+						}
+
+					}
+
+				}
+				
+			}
+
+		}
 
 	}
 	
+	public ArrayList<Tile> getAllNeighboringTiles(ChunkCoordinate current, int tileX, int tileY) {
+
+		Chunk currentChunk = getChunk(current);
+
+		ArrayList<Tile> neighboringTiles = currentChunk.getNeighboringTiles(tileX, tileY);
+
+		if (tileX > 0 && tileX < width && tileY > 0 && tileY < height) {
+
+			return neighboringTiles;
+
+		}
+
+		ArrayList<Chunk> neighboringChunks = new ArrayList<>();
+
+		if (tileX == 0) {
+
+			neighboringChunks.add(getChunk(current.getChunkX() - 1, current.getChunkY()));
+
+			if (tileY == 0) {
+
+				neighboringChunks.add(getChunk(current.getChunkX() - 1, current.getChunkY() - 1));
+
+			}
+
+			if (tileY == height - 1) {
+
+				neighboringChunks.add(getChunk(current.getChunkX() - 1, current.getChunkY() + 1));
+
+			}
+
+		} else {
+
+			neighboringChunks.add(getChunk(current.getChunkX() + 1, current.getChunkY()));
+
+			if (tileY == 0) {
+
+				neighboringChunks.add(getChunk(current.getChunkX() + 1, current.getChunkY() - 1));
+
+			}
+
+			if (tileY == height - 1) {
+
+				neighboringChunks.add(getChunk(current.getChunkX() + 1, current.getChunkY() + 1));
+
+			}
+
+		}
+
+		if (tileY == 0) {
+
+			neighboringChunks.add(getChunk(current.getChunkX(), current.getChunkY() - 1));
+
+		} else {
+
+			neighboringChunks.add(getChunk(current.getChunkX(), current.getChunkY() + 1));
+
+		}
+
+		for (Chunk neighborChunk : neighboringChunks) {
+
+			neighboringTiles.addAll(neighborChunk.getNeighboringTiles(tileX - (neighborChunk.getCoordinate().getChunkX() - current.getChunkX()) * width, tileY - (neighborChunk.getCoordinate().getChunkY() - current.getChunkY()) * height));
+
+		}
+
+		return neighboringTiles;
+	}
+
 	public Chunk getChunk(int chunkX, int chunkY) {
 		
 		return chunks.get(new ChunkCoordinate(chunkX, chunkY));
