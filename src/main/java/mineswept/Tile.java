@@ -65,8 +65,10 @@ public class Tile {
 	public void setY(int y) {
 		this.y = y;
 	}
-	public int sweep() {
-		isRevealed = true;
+	public int sweep() { 
+		if (!isFlagged()) {
+			isRevealed = true;			
+		}
 		return state;
 	}	
 	public boolean flag() {
