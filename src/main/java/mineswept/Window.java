@@ -20,10 +20,10 @@ import javax.swing.event.MouseInputListener;
 
 public class Window extends JPanel implements ActionListener, MouseInputListener, MouseWheelListener {
 
-	public final static int TILE_SIZE = 100;
+	public final static int TILE_SIZE = 50;
 	public int drawTileSize = TILE_SIZE;
 	public double scrollSensitivity = 0.5;
-	public double scale = 1.0;
+	public double scale = 0.5;
 
 	private Game game;
 
@@ -250,8 +250,8 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 
 	public void drawTile(Graphics g, Tile tile, int x, int y) {
 		
-		AffineTransform tileTransform = AffineTransform.getTranslateInstance(x - (int)(game.getxScreenCoordinate() * scale),
-				y - (int)(game.getyScreenCoordinate() * scale));
+		AffineTransform tileTransform = AffineTransform.getTranslateInstance(x - game.getxScreenCoordinate(),
+				y - game.getyScreenCoordinate());
 
 		tileTransform.scale(scale, scale);
 
@@ -355,21 +355,11 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 	    }
 
 	    if (tile.getState() == 0) {
-	        // for (Tile neighboringTile : tile.getChunk().getNeighboringTiles(tile.getX(), tile.getY())) {
-	        //     if (!neighboringTile.isRevealed()) {
-	        //         helperSweep(map, neighboringTile);
-	        //     }
-	        // }
-
-			for (Tile neighboringTile : map.getAllNeighboringTiles(tile.getChunk().getCoordinate(), tile.getX(), tile.getY())) {
-
-				if (!neighboringTile.isRevealed()) {
-
-					helperSweep(map, neighboringTile);
-
-				}
-
-			}
+	        for (Tile neighboringTile : map.getAllNeighboringTiles(tile.getChunk().getCoordinate(), tile.getX(), tile.getY())) {
+	            if (!neighboringTile.isRevealed()) {
+	                helperSweep(map, neighboringTile);
+	            }
+	        }
 	    }
 	}
 
@@ -436,19 +426,7 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent e) {
-
-		System.out.println("Mouse Scrolled!");
-
-		scale = 1.0 + e.getPreciseWheelRotation() * scrollSensitivity;
-		drawTileSize = (int)(TILE_SIZE * scale);
-
-		if (scale < 0.5) {
-			scale = 0.5;
-		}
-
-		if (scale > 2.0) {
-			scale = 2.0;
-		}
+		
 	}
 
 	@Override

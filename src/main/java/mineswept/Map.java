@@ -161,7 +161,7 @@ public class Map {
 
 				}
 
-				ChunkCoordinate newCoord = new new ChunkCoordinate(x + i, y + ii);
+				ChunkCoordinate newCoord = new ChunkCoordinate(x + i, y + ii);
 
 				Chunk neighborChunk = chunks.get(newCoord);
 
@@ -267,10 +267,9 @@ public class Map {
 	
 	public ArrayList<Tile> getAllNeighboringTiles(ChunkCoordinate current, int tileX, int tileY) {
 
-		Tile currentTile = currentChunk.getTile(tileY, tileX);
 		Chunk currentChunk = getChunk(current);
 
-		ArrayList<Tile> neighboringTiles = currentChunk.getNeighboringTiles(currentTile);
+		ArrayList<Tile> neighboringTiles = currentChunk.getNeighboringTiles(tileX, tileY);
 
 		if (tileX > 0 && tileX < width && tileY > 0 && tileY < height) {
 
@@ -326,7 +325,7 @@ public class Map {
 
 		for (Chunk neighborChunk : neighboringChunks) {
 
-			neighboringTiles.addAll(neighborChunk.getNeighboringTiles(tileX - relativeChunkX * width, tileY - relativeChunkY * height));
+			neighboringTiles.addAll(neighborChunk.getNeighboringTiles(tileX - (neighborChunk.getCoordinate().getChunkX() - current.getChunkX()) * width, tileY - (neighborChunk.getCoordinate().getChunkY() - current.getChunkY()) * height));
 
 		}
 
