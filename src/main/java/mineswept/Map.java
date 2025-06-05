@@ -39,7 +39,7 @@ public class Map {
 	public void generateChunk(ChunkCoordinate coord) {
 		
 		chunks.put(coord, new Chunk(width, height, numMines, coord));
-
+ 
 	}
   
 	public ChunkCoordinate[] generateChunks(ChunkCoordinate coord) {
@@ -47,7 +47,7 @@ public class Map {
 		ChunkCoordinate[] generated = new ChunkCoordinate[4];
 		
 		//check/add the north chunk 
-		if(!chunks.containsKey(new ChunkCoordinate(coord.getChunkX(), coord.getChunkY()-1))) {
+		if(!chunks.containsKey(new ChunkCoordinate(coord.getChunkX(), coord.getChunkY()-1)) && coord.getChunkY() != 0) {
 			 
 			//add to the list 
 			generated[0] = new ChunkCoordinate(coord.getChunkX(), coord.getChunkY()-1);
@@ -117,7 +117,6 @@ public class Map {
 			getChunk(generated[3]).setAdjacentChunk(chunks.get(coord), CardinalDirection.EAST);
 					
 		} 
-		
 		
 		return generated; 
 		
