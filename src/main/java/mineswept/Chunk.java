@@ -53,7 +53,7 @@ public class Chunk {
 
 	}
 
-	public ArrayList<Tile> getNeighboringTiles(int x, int y) {
+	public ArrayList<Tile> getNeighboringTiles(int row, int col) {
 
 		ArrayList<Tile> neighboringTiles = new ArrayList<>();
 
@@ -61,15 +61,15 @@ public class Chunk {
 
 			for (int ii = -1; ii <= 1; ii++) {
 
-				if ((i == x && ii == y) || (x + i < 0) || (x + i >= width) || (y + ii < 0) || (y + ii >= height)) {
+				if ((i == 0 && ii == 0) || (row + i < 0) || (row + i >= width) || (col + ii < 0) || (col + ii >= height)) {
 
 					continue;
 
 				}
 
-				if (tiles[x + i][y + ii] != null) {
+				if (tiles[row + i][col + ii] != null) {
 
-					neighboringTiles.add(tiles[x + i][y + ii]);
+					neighboringTiles.add(tiles[row + i][col + ii]);
 
 				}
 

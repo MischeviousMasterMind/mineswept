@@ -8,6 +8,8 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
@@ -18,7 +20,7 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 import javax.swing.event.MouseInputListener;
 
-public class Window extends JPanel implements ActionListener, MouseInputListener, MouseWheelListener {
+public class Window extends JPanel implements ActionListener, MouseInputListener, MouseWheelListener, KeyListener {
 
 	public final static int TILE_SIZE = 50;
 	public int drawTileSize = TILE_SIZE;
@@ -50,6 +52,9 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 		addMouseListener(this);
 		addMouseMotionListener(this);
 		addMouseWheelListener(this);
+		addKeyListener(this);
+
+		setFocusable(true);
 
 		initializeSprites();
 
@@ -183,7 +188,9 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 			
 			//if current chunk has a tile revealed, generate chunks around it
 			if(chunk.getNumOfTilesSweeped() > 0) {
-				game.getMap().getNeighboringChunks(chunk.getCoordinate());
+
+				game.getMap().updateChunkBorder(chunk.getCoordinate());
+
 				
 				
 			}
@@ -348,15 +355,22 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 		flag = Toolkit.getDefaultToolkit().getImage("resources/flag2.png");
 	}
 
+	int numClicks = 0;
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		ChunkCoordinate coordinate = getChunkCoordinate();
 		Chunk chunk = game.getMap().getChunk(coordinate);
 		Tile tile = getTile(coordinate);
-
-		if (e.getButton() == MouseEvent.BUTTON1) { // left click
+		if (e.getButton() == MouseEvent.BUTTON1) { // left click	
+			while (numClicks == 0 && tile.getState() != 0) {
+				chunk = game.getMap().generateChunk(new ChunkCoordinate(coordinate.getChunkX(), coordinate.getChunkY()));
+				tile = getTile(coordinate);
+				game.getMap().getHashMap().put(coordinate, chunk);				
+			}
+			
 			tile.sweep();
-			helperSweep(game.getMap(), tile);			
+			helperSweep(game.getMap(), tile);	
+			numClicks++;
 		} else if (e.getButton() == MouseEvent.BUTTON3) { // right click
 			tile.flag();
 		} else if (e.getButton() == MouseEvent.BUTTON2) { // scroll wheel
@@ -439,13 +453,75 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent e) {
-		
+
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
 		repaint();
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+
+		System.out.println("Key typed");
+
+		if (e.getKeyChar() == 'r') {
+
+			System.out.println("Resetting board");
+			game = new Game(new Map(game.getMap().getNumMines(), game.getMap().getWidth(), game.getMap().getHeight()));
+
+		}
+
+		if (e.getKeyChar() == 'a') {
+
+			System.out.println("Sweeping all tiles in chunk");
+			for (Tile[] row : game.getMap().getChunk(getChunkCoordinate()).getTiles()) {
+
+				for (Tile tile : row) {
+
+					tile.setRevealed(true);
+					
+
+				}
+
+			}
+
+		}
+
+		if (e.getKeyChar() == 'u') {
+
+			System.out.println("Updating chunk border");
+			game.getMap().updateChunkBorder(getChunkCoordinate());
+
+		}
+
+		if (e.getKeyChar() == 'h') {
+
+			System.out.println("Hiding surrounding tiles");
+
+			Tile currentTile = getTile(getChunkCoordinate());
+
+			for (Tile neighboringTile : game.getMap().getAllNeighboringTiles(currentTile.getChunk().getCoordinate(), currentTile.getX(), currentTile.getY())) {
+
+				neighboringTile.setRevealed(false);
+
+			}
+			
+
+		}
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		// TODO Auto-generated method stub
 	}
 
 	
