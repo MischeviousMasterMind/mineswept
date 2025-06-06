@@ -328,6 +328,10 @@ public class Map {
 		return chunks.values();
 		
 	}
+	
+	public HashMap<ChunkCoordinate, Chunk> getHashMap() {
+		return chunks;
+	}
 
 	public int getNumMines() {
 		return numMines;
