@@ -121,7 +121,6 @@ public class Map {
 		} 
 		
 		return generated; 
-		
 	}
 
 	public ArrayList<Chunk> getNeighboringChunks(ChunkCoordinate coord) {
@@ -132,14 +131,14 @@ public class Map {
 
 			for (int ii = -1; ii <= 1; ii++) {
 
-				int x = coord.getChunkX();
-				int y = coord.getChunkY();
-
-				if ((i == x && ii == y) || (x + i < 0) || (x + i >= width) || (y + ii < 0) || (y + ii >= height)) {
+				if (i == 0 && ii == 0) {
 
 					continue;
 
 				}
+
+				int x = coord.getChunkX();
+				int y = coord.getChunkY();
 
 				ChunkCoordinate newCoord = new ChunkCoordinate(x + i, y + ii);
 
@@ -162,7 +161,6 @@ public class Map {
 		return neighboringChunks;
 	}
 
-	// TODO: Fix this method
 	public void updateChunkBorder(ChunkCoordinate coord) {
 
 		Chunk currentChunk = getChunk(coord);
@@ -221,19 +219,20 @@ public class Map {
 
 					currentTile.setState(0);
 
-					for (Tile neighborTile : currentChunk.getNeighboringTiles(i, ii)) {
+					for (Tile neighborTile : currentChunk.getNeighboringTiles(ii, i)) {
 
-						if (neighborTile.getState() == 9) {
-							currentTile.incrementState();
-						}
+						// if (neighborTile.getState() == 9) {
+						// 	currentTile.incrementState();
+						// }
 
 					}
 
-					for (Tile neighborTile : neighborChunk.getNeighboringTiles(i - relativeChunkX * width, ii - relativeChunkY * height)) {
+					for (Tile neighborTile : getAllNeighboringTiles(currentChunk.getCoordinate(), ii, i)) {
 
-						if (neighborTile.getState() == 9) {
-							currentTile.incrementState();
-						}
+						// if (neighborTile.getState() == 9) {
+						// 	currentTile.incrementState();
+						// }
+						neighborTile.setRevealed(false);
 
 					}
 
@@ -251,7 +250,7 @@ public class Map {
 
 		ArrayList<Tile> neighboringTiles = currentChunk.getNeighboringTiles(tileX, tileY);
 
-		if (tileX > 0 && tileX < width && tileY > 0 && tileY < height) {
+		if (tileX > 0 && tileX < width - 1 && tileY > 0 && tileY < height - 1) {
 
 			return neighboringTiles;
 
@@ -305,7 +304,7 @@ public class Map {
 
 		for (Chunk neighborChunk : neighboringChunks) {
 
-			neighboringTiles.addAll(neighborChunk.getNeighboringTiles(tileX - (neighborChunk.getCoordinate().getChunkX() - current.getChunkX()) * width, tileY - (neighborChunk.getCoordinate().getChunkY() - current.getChunkY()) * height));
+			neighboringTiles.addAll(neighborChunk.getNeighboringTiles((neighborChunk.getCoordinate().getChunkX() - current.getChunkX()) * width - tileX - 1, (neighborChunk.getCoordinate().getChunkY() - current.getChunkY()) * height - tileY - 1));
 
 		}
 
