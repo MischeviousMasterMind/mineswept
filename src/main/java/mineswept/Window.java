@@ -14,6 +14,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.geom.AffineTransform;
+import java.util.Collection;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -79,7 +80,7 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 		// drawChunk(g, game.getMap().getChunk(1, 0));
 
 		getChunksOnScreen(g);
-		generateChunksOnScreen(g);
+		// generateChunksOnScreen(g);
 		
 		
 	
@@ -186,14 +187,15 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 	
 	public void generateChunksOnScreen(Graphics g) {
 		
-		for(Chunk chunk : game.getMap().getAllChunks()) {
+		Collection<Chunk> chunks = game.getMap().getAllChunks();
+
+		for(Chunk chunk : chunks) {
 			
 			//if current chunk has a tile revealed, generate chunks around it
 			if(chunk.getNumOfTilesSweeped() > 0) {
 
 				game.getMap().generateChunks(chunk.getCoordinate());
-
-				
+	
 				
 			}
 		}
@@ -362,21 +364,38 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 	public void mouseClicked(MouseEvent e) {
 		ChunkCoordinate coordinate = getChunkCoordinate();
 		Chunk chunk = game.getMap().getChunk(coordinate);
+		
+		if (chunk == null) {
+
+			game.getMap().generateChunk(coordinate);
+			game.getMap().getNeighboringChunks(coordinate);
+
+		}
+
 		Tile tile = getTile(coordinate);
-		if (e.getButton() == MouseEvent.BUTTON1) { // left click	
-			while (numClicks == 0 && tile.getState() != 0) {
-				chunk = game.getMap().generateChunk(new ChunkCoordinate(coordinate.getChunkX(), coordinate.getChunkY()));
-				tile = getTile(coordinate);
-				game.getMap().getHashMap().put(coordinate, chunk);				
-			}
-			
-			tile.sweep();
-			helperSweep(game.getMap(), tile);	
-			numClicks++;
-		} else if (e.getButton() == MouseEvent.BUTTON3) { // right click
-			tile.flag();
-		} else if (e.getButton() == MouseEvent.BUTTON2) { // scroll wheel
-			// clear a bunch of space
+
+		switch (e.getButton()) {
+			case MouseEvent.BUTTON1:
+				// left click
+				while (numClicks == 0 && tile.getState() != 0) {
+					chunk = game.getMap().generateChunk(new ChunkCoordinate(coordinate.getChunkX(), coordinate.getChunkY()));
+					tile = getTile(coordinate);
+					game.getMap().getHashMap().put(coordinate, chunk);
+				}
+				tile.sweep();
+				helperSweep(game.getMap(), tile);
+				numClicks++;
+				break;
+			case MouseEvent.BUTTON3:
+				// right click
+				tile.flag();
+				break;
+		// scroll wheel
+		// clear a bunch of space
+			case MouseEvent.BUTTON2:
+				break;
+			default:
+				break;
 		}
 	}
 	
@@ -384,6 +403,8 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 		if (!tile.isRevealed()) {
 	        tile.sweep();
 	        
+			System.out.printf("Tile Coordinate: (%d, %d)		| Chunk Coordinate: (%d, %d)\n", tile.getX(), tile.getY(), tile.getChunk().getCoordinate().getChunkX(), tile.getChunk().getCoordinate().getChunkY());
+
 	        //increment the num of tiles sweeped for the chunk ? delete this if it is bad
 	        tile.getChunk().setNumOfTilesSweeped(tile.getChunk().getNumOfTilesSweeped()+1);
 	    }
@@ -401,8 +422,6 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-
-		System.out.println("Mouse is pressed");
 
 		mouseInitX = e.getX();
 		mouseInitY = e.getY();
@@ -429,8 +448,6 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 
 		game.setScreenCoordinate(initxScreenCoordinate + (mouseInitX - e.getX()),
 				inityScreenCoordinate + (mouseInitY - e.getY()));
-
-		System.out.println("Mouse is being dragged");
 
 		xMapPositionOfMouse = currentMouseX + (int) game.getxScreenCoordinate();
 		yMapPositionOfMouse = currentMouseY + (int) game.getyScreenCoordinate();
@@ -466,8 +483,6 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-
-		System.out.println("Key typed");
 
 		if (e.getKeyChar() == 'r') {
 
