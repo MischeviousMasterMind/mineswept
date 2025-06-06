@@ -165,10 +165,12 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 	public void getChunksOnScreen(Graphics g) {
 		
 
-		for(int i = (int) ((double) inityScreenCoordinate/(game.getMap().getHeight() * TILE_SIZE))/2; 
-				i < Math.ceil((inityScreenCoordinate+getSize().getHeight())/(game.getMap().getHeight() * TILE_SIZE)*2); i++) {
-			for(int j = (int) ((double)initxScreenCoordinate/(game.getMap().getWidth() * TILE_SIZE))/2; 
-					j < Math.ceil((initxScreenCoordinate+getSize().getWidth())/(game.getMap().getWidth() * TILE_SIZE)*2); j++) {
+		//the +/- 2 acts as a buffer for loading in the chunks 
+		for(int i = (int) Math.floor((double) inityScreenCoordinate/(game.getMap().getHeight() * TILE_SIZE))-2; 
+				i < Math.ceil((inityScreenCoordinate+getSize().getHeight())/(game.getMap().getHeight() * TILE_SIZE))+2; i++) {
+			
+			for(int j = (int) Math.floor((double) initxScreenCoordinate/(game.getMap().getWidth() * TILE_SIZE))-2; 
+					j < Math.ceil((initxScreenCoordinate+getSize().getWidth())/(game.getMap().getWidth() * TILE_SIZE))+2; j++) {
 				
 				  ChunkCoordinate coord = new ChunkCoordinate(j, i); //replace after u figure out coords
 				  
@@ -185,22 +187,6 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 		
 	}
 	
-	public void generateChunksOnScreen(Graphics g) {
-		
-		Collection<Chunk> chunks = game.getMap().getAllChunks();
-
-		for(Chunk chunk : chunks) {
-			
-			//if current chunk has a tile revealed, generate chunks around it
-			if(chunk.getNumOfTilesSweeped() > 0) {
-
-				game.getMap().generateChunks(chunk.getCoordinate());
-	
-				
-			}
-		}
-		
-	}
 
 	public void drawMap(Graphics g, Map map) {
 
