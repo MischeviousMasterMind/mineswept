@@ -23,9 +23,10 @@ import javax.swing.event.MouseInputListener;
 public class Window extends JPanel implements ActionListener, MouseInputListener, MouseWheelListener, KeyListener {
 
 	public final static int TILE_SIZE = 50;
-	public int drawTileSize = TILE_SIZE;
-	public double scrollSensitivity = 0.5;
-	public double scale = 0.5;
+	private int drawTileSize = TILE_SIZE;
+	private double scrollSensitivity = 0.5;
+	private double scale = 0.5;
+	private boolean debug = false;
 
 	private Game game;
 
@@ -86,12 +87,13 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 		
 		// drawChunk(g, game.getMap().getChunk(0, 0), (int)game.getxScreenCoordinate(), (int)game.getyScreenCoordinate());
 
-		g.setColor(Color.BLACK);
+		// g.setColor(Color.BLACK);
 
-		g.drawString(String.format("Scale: %.2f", scale), (int)(getSize().getWidth() - 70), 20);
-		g.drawString(String.format("Draw Tile Size: %d", drawTileSize), (int)(getSize().getWidth() - 140), 40);
-
-		debug(g);
+		// g.drawString(String.format("Scale: %.2f", scale), (int)(getSize().getWidth() - 70), 20);
+		// g.drawString(String.format("Draw Tile Size: %d", drawTileSize), (int)(getSize().getWidth() - 140), 40);
+		if (debug) {
+			debug(g);
+		}
 	}
 
 	public void debug(Graphics g) {
@@ -189,7 +191,7 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 			//if current chunk has a tile revealed, generate chunks around it
 			if(chunk.getNumOfTilesSweeped() > 0) {
 
-				game.getMap().updateChunkBorder(chunk.getCoordinate());
+				game.getMap().generateChunks(chunk.getCoordinate());
 
 				
 				
@@ -387,7 +389,7 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 	    }
 
 	    if (tile.getState() == 0) {
-	        for (Tile neighboringTile : map.getAllNeighboringTiles(tile.getChunk().getCoordinate(), tile.getX(), tile.getY())) {
+	        for (Tile neighboringTile : tile.getChunk().getNeighboringTiles(tile.getX(), tile.getY())) {
 	            if (!neighboringTile.isRevealed()) {
 	                helperSweep(map, neighboringTile);
 	            }
@@ -509,6 +511,12 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 
 			}
 			
+
+		}
+
+		if (e.getKeyChar() == 'd') {
+
+			debug = !debug;
 
 		}
 	}

@@ -39,12 +39,7 @@ public class Game {
 
 	public static void main(String[] args) {
 
-		Map map = new Map(1, 16, 16);
-		map.generateChunks(new ChunkCoordinate(0, 0));
-		map.updateChunkBorder(new ChunkCoordinate(0, 0));
-		
-
-
+		Map map = new Map(32, 16, 16);
 
 		// map.updateChunkBorder(new ChunkCoordinate(0, 0));
 		// map.updateChunkBorder(new ChunkCoordinate(1, 0));
