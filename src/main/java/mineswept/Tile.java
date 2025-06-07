@@ -67,7 +67,8 @@ public class Tile {
 	}
 	public int sweep() { 
 		if (!isFlagged()) {
-			isRevealed = true;			
+			isRevealed = true;
+			chunk.incrementNumOfTilesSweeped();			
 		}
 		return state;
 	}	
