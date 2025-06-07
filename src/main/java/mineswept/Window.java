@@ -14,7 +14,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.geom.AffineTransform;
-import java.util.Collection;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -368,7 +367,6 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 				// 	tile = getTile(coordinate);
 				// 	game.getMap().getHashMap().put(coordinate, chunk);
 				// }
-				tile.sweep();
 				helperSweep(game.getMap(), getChunkCoordinate(), tile.getX(), tile.getY());
 				numClicks++;
 				break;
@@ -396,21 +394,33 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 
 		}
 
+		if (!chunk.isUpdated()) {
+
+			map.generateNeighboringChunks(coord);
+
+		}
+
 		Tile tile = chunk.getTile(tileX, tileY);
 		tile.sweep();
 
-		if (!tile.isRevealed()) {
+		// if (!tile.isRevealed()) {
 	        
-			System.out.printf("Tile Coordinate: (%d, %d)		| Chunk Coordinate: (%d, %d)\n", tileX, tileY, chunk.getCoordinate().getChunkX(), chunk.getCoordinate().getChunkY());
+		// 	System.out.printf("Tile Coordinate: (%d, %d)		| Chunk Coordinate: (%d, %d)\n", tileX, tileY, chunk.getCoordinate().getChunkX(), chunk.getCoordinate().getChunkY());
 
-	        //increment the num of tiles sweeped for the chunk ? delete this if it is bad
-	        tile.getChunk().setNumOfTilesSweeped(tile.getChunk().getNumOfTilesSweeped()+1);
-		}
+	    //     //increment the num of tiles sweeped for the chunk ? delete this if it is bad
+	    //     tile.getChunk().setNumOfTilesSweeped(tile.getChunk().getNumOfTilesSweeped()+1);
+		// }
 
 		if (tile.getState() == 0) {
-			for (Tile neighboringTile : map.getAllNeighboringTiles(getChunkCoordinate(), tile.getX(), tile.getY())) {
-				if (!neighboringTile.isRevealed()) {
+			for (Tile neighboringTile : map.getAllNeighboringTiles(tile.getChunk().getCoordinate(), tile.getX(), tile.getY())) {
+				if (!neighboringTile.isRevealed() && neighboringTile.getState() == 0) {
+
 					helperSweep(map, neighboringTile.getChunk().getCoordinate(), neighboringTile.getX(), neighboringTile.getY());
+
+				} else {
+
+					neighboringTile.sweep();
+					
 				}
 			}
 		}
@@ -490,6 +500,13 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 		}
 
 		if (e.getKeyChar() == 'a') {
+
+			if (game.getMap().getChunk(getChunkCoordinate()) == null) {
+
+				game.getMap().generateChunk(getChunkCoordinate());
+				game.getMap().generateNeighboringChunks(getChunkCoordinate());
+
+			}
 
 			System.out.println("Sweeping all tiles in chunk");
 			for (Tile[] row : game.getMap().getChunk(getChunkCoordinate()).getTiles()) {

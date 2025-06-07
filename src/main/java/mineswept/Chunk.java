@@ -19,6 +19,8 @@ public class Chunk {
 
 	private ChunkCoordinate coordinate;
 
+	private boolean updated;
+
 	// TODO Implement constructor
 	public Chunk(int width, int height, int numOfMines, ChunkCoordinate coordinate) {
 
@@ -86,6 +88,10 @@ public class Chunk {
 
 	public void setNumOfTilesSweeped(int numOfTilesSweeped) {
 		this.numOfTilesSweeped = numOfTilesSweeped;
+	}
+
+	public void incrementNumOfTilesSweeped() {
+		numOfTilesSweeped++;
 	}
 
 	public int getNumOfEmptyTiles() {
@@ -234,4 +240,13 @@ public class Chunk {
 			break;
 		}
 	}
+
+	public boolean isUpdated() {
+		return updated;
+	}
+
+	public void setUpdated(boolean updated) {
+		this.updated = updated;
+	}
 }
+
