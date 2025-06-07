@@ -368,7 +368,7 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 		if (chunk == null) {
 
 			game.getMap().generateChunk(coordinate);
-			game.getMap().getNeighboringChunks(coordinate);
+			game.getMap().generateNeighboringChunks(coordinate);
 
 		}
 
@@ -377,13 +377,13 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 		switch (e.getButton()) {
 			case MouseEvent.BUTTON1:
 				// left click
-				while (numClicks == 0 && tile.getState() != 0) {
-					chunk = game.getMap().generateChunk(new ChunkCoordinate(coordinate.getChunkX(), coordinate.getChunkY()));
-					tile = getTile(coordinate);
-					game.getMap().getHashMap().put(coordinate, chunk);
-				}
+				// while (numClicks == 0 && tile.getState() != 0) {
+				// 	chunk = game.getMap().generateChunk(new ChunkCoordinate(coordinate.getChunkX(), coordinate.getChunkY()));
+				// 	tile = getTile(coordinate);
+				// 	game.getMap().getHashMap().put(coordinate, chunk);
+				// }
 				tile.sweep();
-				helperSweep(game.getMap(), tile);
+				helperSweep(game.getMap(), getChunkCoordinate(), tile.getX(), tile.getY());
 				numClicks++;
 				break;
 			case MouseEvent.BUTTON3:
@@ -399,23 +399,35 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 		}
 	}
 	
-	public void helperSweep(Map map, Tile tile) {
+	public void helperSweep(Map map, ChunkCoordinate coord, int tileX, int tileY) {
+
+		Chunk chunk = map.getChunk(coord);
+
+		if (chunk == null) {
+
+			chunk = map.generateChunk(coord);
+			map.generateNeighboringChunks(coord);
+
+		}
+
+		Tile tile = chunk.getTile(tileX, tileY);
+		tile.sweep();
+
 		if (!tile.isRevealed()) {
-	        tile.sweep();
 	        
-			System.out.printf("Tile Coordinate: (%d, %d)		| Chunk Coordinate: (%d, %d)\n", tile.getX(), tile.getY(), tile.getChunk().getCoordinate().getChunkX(), tile.getChunk().getCoordinate().getChunkY());
+			System.out.printf("Tile Coordinate: (%d, %d)		| Chunk Coordinate: (%d, %d)\n", tileX, tileY, chunk.getCoordinate().getChunkX(), chunk.getCoordinate().getChunkY());
 
 	        //increment the num of tiles sweeped for the chunk ? delete this if it is bad
 	        tile.getChunk().setNumOfTilesSweeped(tile.getChunk().getNumOfTilesSweeped()+1);
-	    }
+		}
 
-	    if (tile.getState() == 0) {
-	        for (Tile neighboringTile : tile.getChunk().getNeighboringTiles(tile.getX(), tile.getY())) {
-	            if (!neighboringTile.isRevealed()) {
-	                helperSweep(map, neighboringTile);
-	            }
-	        }
-	    }
+		if (tile.getState() == 0) {
+			for (Tile neighboringTile : map.getAllNeighboringTiles(getChunkCoordinate(), tile.getX(), tile.getY())) {
+				if (!neighboringTile.isRevealed()) {
+					helperSweep(map, neighboringTile.getChunk().getCoordinate(), neighboringTile.getX(), neighboringTile.getY());
+				}
+			}
+		}
 	}
 
 
