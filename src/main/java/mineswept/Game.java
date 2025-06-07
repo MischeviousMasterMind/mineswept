@@ -15,6 +15,7 @@ public class Game {
 	private int numOfRevealedTiles;
 	private int numOfRevealedChunks;
 	private boolean isGameOver;
+	private int numClicks = 0;
 	// The window handle
 	private static long window;
 	private Map map;
@@ -23,6 +24,14 @@ public class Game {
 
 		this.map = map;
 
+	}
+	
+	public int getNumClicks() {
+		return numClicks;
+	}
+	
+	public void updateNumClicks() {
+		numClicks++;
 	}
 
 	public void clickTile(ChunkCoordinate tileLocation) {

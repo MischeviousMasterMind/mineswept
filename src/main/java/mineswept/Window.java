@@ -36,6 +36,7 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 	private int currentMouseX, currentMouseY;
 	private int initxScreenCoordinate, inityScreenCoordinate;
 	private int xMapPositionOfMouse, yMapPositionOfMouse;
+	
 
 	private double zoom;
 
@@ -93,7 +94,7 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 		// g.drawString(String.format("Draw Tile Size: %d", drawTileSize), (int)(getSize().getWidth() - 140), 40);
 		if (debug) {
 			debug(g);
-		}
+		} 
 	}
 
 	public void debug(Graphics g) {
@@ -344,7 +345,7 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 		flag = Toolkit.getDefaultToolkit().getImage("resources/flag2.png");
 	}
 
-	int numClicks = 0;
+
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		ChunkCoordinate coordinate = getChunkCoordinate();
@@ -362,13 +363,13 @@ public class Window extends JPanel implements ActionListener, MouseInputListener
 		switch (e.getButton()) {
 			case MouseEvent.BUTTON1:
 				// left click
-				// while (numClicks == 0 && tile.getState() != 0) {
-				// 	chunk = game.getMap().generateChunk(new ChunkCoordinate(coordinate.getChunkX(), coordinate.getChunkY()));
-				// 	tile = getTile(coordinate);
-				// 	game.getMap().getHashMap().put(coordinate, chunk);
-				// }
+				 while (game.getNumClicks() == 0 && tile.getState() != 0) {
+				 	chunk = game.getMap().generateChunk(new ChunkCoordinate(coordinate.getChunkX(), coordinate.getChunkY()));
+				 	tile = getTile(coordinate);
+				 	game.getMap().getHashMap().put(coordinate, chunk);
+				 }
 				helperSweep(game.getMap(), getChunkCoordinate(), tile.getX(), tile.getY());
-				numClicks++;
+				game.updateNumClicks();
 				break;
 			case MouseEvent.BUTTON3:
 				// right click
